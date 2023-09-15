@@ -1,0 +1,27 @@
+{
+  "name": "techfab-innovations-erp-system",
+  "version": "1.0.0",
+  "description": "The TechFab Innovations ERP System is an enterprise resource planning application designed to streamline operations and enhance efficiency for a manufacturing company, TechFab Innovations Inc.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lucas-Argerich/techfab-innovations-erp-system.git"
+  },
+  "author": "Lucas Argerich",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lucas-Argerich/techfab-innovations-erp-system/issues"
+  },
+  "homepage": "https://github.com/Lucas-Argerich/techfab-innovations-erp-system#readme",
+  "devDependencies": {
+    "eslint": "^8.49.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-n": "^16.1.0",
+    "eslint-plugin-promise": "^6.1.1"
+  }
+}
