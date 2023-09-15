@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/Lucas-Argerich/techfab-innovations-erp-system#readme",
   "devDependencies": {
+    "@babel/eslint-parser": "^7.22.15",
+    "@babel/plugin-syntax-import-attributes": "^7.22.5",
     "eslint": "^8.49.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.28.1",
