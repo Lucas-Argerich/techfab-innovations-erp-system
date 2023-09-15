@@ -1,0 +1,99 @@
+{
+  "inventory": [
+    {
+      "id": 1,
+      "name": "Laptop",
+      "category": "Electronics",
+      "quantity": 100,
+      "price": 800.0
+    },
+    {
+      "id": 2,
+      "name": "Printer",
+      "category": "Electronics",
+      "quantity": 50,
+      "price": 300.0
+    },
+    {
+      "id": 3,
+      "name": "Forklift",
+      "category": "Machinery",
+      "quantity": 10,
+      "price": 5000.0
+    }
+  ],
+  "orders": [
+    {
+      "id": 1,
+      "customer_id": 101,
+      "products": [
+        {
+          "product_id": 1,
+          "quantity": 2
+        },
+        {
+          "product_id": 2,
+          "quantity": 1
+        }
+      ],
+      "total_price": 1900.0,
+      "status": "Pending"
+    },
+    {
+      "id": 2,
+      "customer_id": 102,
+      "products": [
+        {
+          "product_id": 3,
+          "quantity": 1
+        }
+      ],
+      "total_price": 5000.0,
+      "status": "Processing"
+    }
+  ],
+  "production": [
+    {
+      "id": 1,
+      "product_id": 1,
+      "quantity": 20,
+      "status": "In Progress"
+    },
+    {
+      "id": 2,
+      "product_id": 2,
+      "quantity": 10,
+      "status": "Completed"
+    }
+  ],
+  "customers": [
+    {
+      "id": 101,
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "phone": "123-456-7890"
+    },
+    {
+      "id": 102,
+      "name": "Jane Smith",
+      "email": "jane.smith@example.com",
+      "phone": "987-654-3210"
+    }
+  ],
+  "employees": [
+    {
+      "id": 201,
+      "name": "Alice Smith",
+      "position": "Production Manager",
+      "phone": "987-654-3210",
+      "email": "alice.smith@example.com"
+    },
+    {
+      "id": 202,
+      "name": "Bob Johnson",
+      "position": "Sales Representative",
+      "phone": "555-555-5555",
+      "email": "bob.johnson@example.com"
+    }
+  ]
+}
