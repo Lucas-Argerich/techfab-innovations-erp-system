@@ -1,12 +1,13 @@
-const http = require('node:http')
+const express = require('express')
+const app = express()
 
-const desiredPort = process.env.desiredPort | 3000
+const PORT = process.env.PORT | 3000
 
-const server = http.createServer((req, res) => {
+app.get('/', (req, res) => {
   console.log('request received:', req.url)
-  res.end('Hello World!')
+  res.send('Hello World!')
 })
 
-server.listen(desiredPort, () => {
-  console.log(`server listening on port http://localhost:${desiredPort}`)
+app.listen(PORT, () => {
+  console.log(`server listening on port http://localhost:${PORT}`)
 })
