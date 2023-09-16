@@ -4,12 +4,17 @@ import db from '../db.json' assert { type: 'json' }
 export const inventoryRouter = Router()
 
 class InventoryItem {
-  constructor ({ name, category, quantity, price }) {
+  id: number
+  name: string
+  category: string
+  quantity: number
+  price: number
+  constructor ({ name = '', category = '', quantity = 0, price = 0 }) {
     this.id = db.inventory.length + 1
-    this.name = name || null
-    this.category = category || null
-    this.quantity = quantity || null
-    this.price = price || null
+    this.name = name
+    this.category = category
+    this.quantity = quantity
+    this.price = price
   }
 }
 
@@ -25,7 +30,7 @@ inventoryRouter.get('/:id', (req, res) => {
   const itemId = parseInt(req.params.id)
   const item = db.inventory.find((item) => item.id === itemId)
 
-  if (!item) {
+  if (item === undefined) {
     return res.status(404).send(new Error('Item not found in database.'))
   }
 
@@ -44,23 +49,23 @@ inventoryRouter.put('/:id', (req, res) => {
   const itemId = parseInt(req.params.id)
   const item = db.inventory.find((item) => item.id === itemId)
 
-  if (!item) {
+  if (item === undefined) {
     return res.status(404).send(new Error('Item not found in database.'))
   }
 
-  if (req.body.name) {
-    item.body = req.body.name
+  if (req.body.name !== undefined) {
+    item.name = req.body.name
   }
 
-  if (req.body.category) {
+  if (req.body.category !== undefined) {
     item.category = req.body.category
   }
 
-  if (req.body.quantity) {
+  if (req.body.quantity !== undefined) {
     item.quantity = req.body.quantity
   }
 
-  if (req.body.price) {
+  if (req.body.price !== undefined) {
     item.price = req.body.price
   }
 
