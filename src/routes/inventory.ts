@@ -1,22 +1,8 @@
 import { Router, json } from 'express'
-import db from '../db.json' assert { type: 'json' }
+import { type InventoryItem } from '../types/db-types'
+import { db } from '../utils/utils'
 
 export const inventoryRouter = Router()
-
-class InventoryItem {
-  id: number
-  name: string
-  category: string
-  quantity: number
-  price: number
-  constructor ({ name = '', category = '', quantity = 0, price = 0 }) {
-    this.id = db.inventory.length + 1
-    this.name = name
-    this.category = category
-    this.quantity = quantity
-    this.price = price
-  }
-}
 
 inventoryRouter.use(json())
 
@@ -39,8 +25,9 @@ inventoryRouter.get('/:id', (req, res) => {
 
 // Create a new inventory item:
 inventoryRouter.post('/', (req, res) => {
-  const item = new InventoryItem(req.body)
-  db.inventory.push(item)
+  const item = req.body as InventoryItem
+  console.log(item)
+  // db.inventory.push(item)
   res.status(200).json({ message: 'Item created successfully', item })
 })
 

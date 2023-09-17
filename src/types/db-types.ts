@@ -42,3 +42,11 @@ export interface Customer extends Person {
 export interface Employee extends Person {
   position: string
 }
+
+export interface Database {
+  inventory: InventoryItem[]
+  orders: Order[]
+  production: ProductionItem[]
+  customers: Customer[]
+  employees: Employee[]
+}

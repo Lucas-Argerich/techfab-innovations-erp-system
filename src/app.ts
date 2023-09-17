@@ -1,6 +1,6 @@
 import express from 'express'
-import { inventoryRouter } from './routes/inventory'
 import { corsMiddleware } from './middlewares/cors'
+import { inventoryRouter } from './routes/inventory'
 
 // Configuration
 const app = express()
@@ -13,7 +13,7 @@ app.use(corsMiddleware())
 app.use('/inventory', inventoryRouter)
 
 // Deploy
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT ?? 3000
 app.listen(PORT, () => {
   console.log(`server listening on port http://localhost:${PORT}`)
 })
