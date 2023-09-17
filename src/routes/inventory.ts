@@ -23,7 +23,7 @@ inventoryRouter.get('/:id', (req, res) => {
   res.json(db.inventory.find((item) => item.id === itemId))
 })
 
-// Create a new inventory item:
+// Create a new inventory item
 inventoryRouter.post('/', (req, res) => {
   const item = req.body as InventoryItem
   console.log(item)
@@ -31,7 +31,7 @@ inventoryRouter.post('/', (req, res) => {
   res.status(200).json({ message: 'Item created successfully', item })
 })
 
-// Update an existing inventory item:
+// Update an existing inventory item
 inventoryRouter.put('/:id', (req, res) => {
   const itemId = parseInt(req.params.id)
   const item = db.inventory.find((item) => item.id === itemId)
@@ -57,4 +57,18 @@ inventoryRouter.put('/:id', (req, res) => {
   }
 
   res.status(200).json({ message: 'Item updated successfully', item })
+})
+
+// Delete a specific inventory item by ID
+inventoryRouter.delete('/:id', (req, res) => {
+  const itemId = parseInt(req.params.id)
+  const index = db.inventory.findIndex((item) => item.id === itemId)
+
+  if (index === -1) {
+    return res.status(404).send(new Error('Item not found in database.'))
+  }
+
+  db.inventory.splice(index, 1)
+
+  res.status(200).json({ message: 'Item deleted successfully' })
 })
