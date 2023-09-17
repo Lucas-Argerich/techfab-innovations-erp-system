@@ -2,12 +2,12 @@
   "name": "techfab-innovations-erp-system",
   "version": "1.0.0",
   "description": "The TechFab Innovations ERP System is an enterprise resource planning application designed to streamline operations and enhance efficiency for a manufacturing company, TechFab Innovations Inc.",
-  "main": "app.ts",
-  "type": "module",
+  "main": "dist/app.js",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./app.ts",
-    "dev": "node --watch ./app.ts"
+    "start": "tsc && node dist/app.js",
+    "dev": "ts-node-dev src/app.ts"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
     "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-n": "^16.1.0",
     "eslint-plugin-promise": "^6.1.1",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.2.2"
   },
   "dependencies": {
