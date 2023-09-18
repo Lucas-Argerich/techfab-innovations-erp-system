@@ -92,10 +92,29 @@ describe('Orders API', () => {
   })
 
   describe('DELETE /orders/:id', () => {
-    it('should delete an order', async () => {
-      const res = await request(app).delete(`/orders/${orderId}`)
-      expect(res.status).to.equal(200)
-      expect(res.body).to.have.property('message', 'Order deleted successfully')
+    it('should mark an order as cancelled', async () => {
+      const newOrder = {
+        customer_id: 1,
+        products: [
+          { product_id: 1, quantity: 2 },
+          { product_id: 2, quantity: 1 }
+        ],
+        total_price: 100,
+        status: OrderStatus.Pending
+      }
+
+      const createResponse = await request(app).post('/orders').send(newOrder)
+      const createdOrderId = createResponse.body.order.id
+
+      const deleteResponse = await request(app).delete(
+        `/orders/${createdOrderId}`
+      )
+
+      expect(deleteResponse.status).to.equal(200)
+      expect(deleteResponse.body).to.have.property(
+        'message',
+        'Order marked as cancelled successfully'
+      )
     })
   })
 

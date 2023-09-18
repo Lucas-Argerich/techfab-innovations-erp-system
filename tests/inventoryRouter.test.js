@@ -104,10 +104,27 @@ describe('Inventory API', () => {
   })
 
   describe('DELETE /inventory/:id', () => {
-    it('should delete an inventory item', async () => {
-      const res = await request(app).delete(`/inventory/${itemId}`)
-      expect(res.status).to.equal(200)
-      expect(res.body).to.have.property('message', 'Item deleted successfully')
+    it('should discontinue an inventory item', async () => {
+      const newItem = {
+        name: 'Test Item',
+        category: 'Test Category',
+        quantity: 10,
+        price: 20,
+        status: InventoryItemStatus.Available
+      }
+
+      const createResponse = await request(app).post('/inventory').send(newItem)
+      const createdItemId = createResponse.body.item.id
+
+      const deleteResponse = await request(app).delete(
+        `/inventory/${createdItemId}`
+      )
+
+      expect(deleteResponse.status).to.equal(200)
+      expect(deleteResponse.body).to.have.property(
+        'message',
+        'Item discontinued successfully'
+      )
     })
   })
 
