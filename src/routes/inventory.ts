@@ -17,7 +17,7 @@ inventoryRouter.get('/:id', (req, res) => {
   const item = db.inventory.find((item) => item.id === itemId)
 
   if (item === undefined) {
-    return res.status(404).send(new Error('Item not found in database.'))
+    return res.status(404).send({ error: 'Item not found in database.' })
   }
 
   res.json(item)
@@ -59,7 +59,7 @@ inventoryRouter.put('/:id', (req, res) => {
   const item = db.inventory.find((item) => item.id === itemId)
 
   if (item === undefined) {
-    return res.status(404).send(new Error('Item not found in database.'))
+    return res.status(404).send({ error: 'Item not found in database.' })
   }
 
   if (req.body.name !== undefined) {
@@ -97,7 +97,7 @@ inventoryRouter.delete('/:id', (req, res) => {
   const index = db.inventory.findIndex((item) => item.id === itemId)
 
   if (index === -1) {
-    return res.status(404).send(new Error('Item not found in database.'))
+    return res.status(404).send({ error: 'Item not found in database.' })
   }
 
   db.inventory.splice(index, 1)
