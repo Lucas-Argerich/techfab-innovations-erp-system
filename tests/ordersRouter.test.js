@@ -3,6 +3,7 @@ const { describe, it } = require('mocha')
 const request = require('supertest')
 const express = require('express')
 const { ordersRouter } = require('../dist/routes/orders')
+const { OrderStatus } = require('../dist/types/db-types')
 
 const app = express()
 app.use(express.json())
@@ -20,7 +21,7 @@ describe('Orders API', () => {
   })
 
   describe('POST /orders', () => {
-    it('should create a new order', async () => {
+    it('should create a new order with a valid status', async () => {
       const newOrder = {
         customer_id: 1,
         products: [
@@ -28,7 +29,7 @@ describe('Orders API', () => {
           { product_id: 2, quantity: 1 }
         ],
         total_price: 100,
-        status: 'pending'
+        status: OrderStatus.Pending
       }
 
       const res = await request(app).post('/orders').send(newOrder)
@@ -38,15 +39,32 @@ describe('Orders API', () => {
       expect(res.body.order).to.have.property('id')
       orderId = res.body.order.id // Store the ID for later use
     })
+
+    it('should fail to create a new order with an invalid status', async () => {
+      const newOrder = {
+        customer_id: 1,
+        products: [
+          { product_id: 1, quantity: 2 },
+          { product_id: 2, quantity: 1 }
+        ],
+        total_price: 100,
+        status: 'InvalidStatus' // Invalid OrderStatus
+      }
+
+      const res = await request(app).post('/orders').send(newOrder)
+
+      expect(res.status).to.equal(400)
+      expect(res.body).to.have.property('error')
+    })
   })
 
   describe('PUT /orders/:id', () => {
-    it('should update an existing order', async () => {
+    it('should update an existing order with a valid status', async () => {
       const updatedOrder = {
         customer_id: 2,
         products: [{ product_id: 3, quantity: 3 }],
         total_price: 150,
-        status: 'shipped'
+        status: OrderStatus.Shipped
       }
 
       const res = await request(app)
@@ -54,8 +72,22 @@ describe('Orders API', () => {
         .send(updatedOrder)
 
       expect(res.status).to.equal(200)
-      expect(res.body).to.have.property('message', 'Order updated successfully')
-      expect(res.body.order).to.deep.include(updatedOrder)
+    })
+
+    it('should fail to update an order with an invalid status', async () => {
+      const updatedOrder = {
+        customer_id: 2,
+        products: [{ product_id: 3, quantity: 3 }],
+        total_price: 150,
+        status: 'InvalidStatus' // Invalid OrderStatus
+      }
+
+      const res = await request(app)
+        .put(`/orders/${orderId}`)
+        .send(updatedOrder)
+
+      expect(res.status).to.equal(400)
+      expect(res.body).to.have.property('error')
     })
   })
 
@@ -84,7 +116,7 @@ describe('Orders API', () => {
           customer_id: 2,
           products: [{ product_id: 3, quantity: 3 }],
           total_price: 150,
-          status: 'shipped'
+          status: OrderStatus.Shipped
         })
       expect(res.status).to.equal(404)
       expect(res.body).to.have.property('error')

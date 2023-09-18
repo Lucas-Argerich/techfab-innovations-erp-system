@@ -3,6 +3,7 @@ const { describe, it } = require('mocha')
 const request = require('supertest')
 const express = require('express')
 const { inventoryRouter } = require('../dist/routes/inventory')
+const { InventoryItemStatus } = require('../dist/types/db-types')
 
 const app = express()
 app.use(express.json())
@@ -26,7 +27,7 @@ describe('Inventory API', () => {
         category: 'Test Category',
         quantity: 10,
         price: 20,
-        status: 'available'
+        status: InventoryItemStatus.Available
       }
 
       const res = await request(app).post('/inventory').send(newItem)
@@ -35,6 +36,33 @@ describe('Inventory API', () => {
       expect(res.body).to.have.property('message', 'Item created successfully')
       expect(res.body.item).to.have.property('id')
       itemId = res.body.item.id // Store the ID for later use
+    })
+
+    it('should fail to create a new inventory item with missing fields', async () => {
+      const invalidItem = {
+        name: 'Test Item',
+        category: 'Test Category'
+      }
+
+      const res = await request(app).post('/inventory').send(invalidItem)
+
+      expect(res.status).to.equal(400)
+      expect(res.body).to.have.property('error')
+    })
+
+    it('should fail to create a new inventory item with an invalid status', async () => {
+      const newItem = {
+        name: 'Test Item',
+        category: 'Test Category',
+        quantity: 10,
+        price: 20,
+        status: 'InvalidStatus' // Invalid InventoryItemStatus
+      }
+
+      const res = await request(app).post('/inventory').send(newItem)
+
+      expect(res.status).to.equal(400)
+      expect(res.body).to.have.property('error')
     })
   })
 
@@ -45,7 +73,7 @@ describe('Inventory API', () => {
         category: 'Updated Test Category',
         quantity: 20,
         price: 30,
-        status: 'out of stock'
+        status: InventoryItemStatus.OutOfStock
       }
 
       const res = await request(app)
@@ -55,6 +83,23 @@ describe('Inventory API', () => {
       expect(res.status).to.equal(200)
       expect(res.body).to.have.property('message', 'Item updated successfully')
       expect(res.body.item).to.deep.include(updatedItem)
+    })
+
+    it('should fail to update an inventory item with an invalid status', async () => {
+      const updatedItem = {
+        name: 'Updated Test Item',
+        category: 'Updated Test Category',
+        quantity: 20,
+        price: 30,
+        status: 'InvalidStatus' // Invalid InventoryItemStatus
+      }
+
+      const res = await request(app)
+        .put(`/inventory/${itemId}`)
+        .send(updatedItem)
+
+      expect(res.status).to.equal(400)
+      expect(res.body).to.have.property('error')
     })
   })
 
@@ -82,7 +127,7 @@ describe('Inventory API', () => {
         category: 'Updated Category',
         quantity: 20,
         price: 30,
-        status: 'Available'
+        status: InventoryItemStatus.Available
       })
       expect(res.status).to.equal(404)
       expect(res.body).to.have.property('error')
