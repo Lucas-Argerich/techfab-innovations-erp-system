@@ -1,5 +1,5 @@
 import { Router, json } from 'express'
-import { type InventoryItem } from '../types/db-types'
+import { InventoryItemStatus, type InventoryItem } from '../types/db-types'
 import { db, isAnyUndefined, isValidInventoryStatus } from '../utils/utils'
 
 export const inventoryRouter = Router()
@@ -91,16 +91,16 @@ inventoryRouter.put('/:id', (req, res) => {
   res.status(200).json({ message: 'Item updated successfully', item })
 })
 
-// Delete a specific inventory item by ID
+// Delete a specific inventory item by ID (doesn't delete, changes status)
 inventoryRouter.delete('/:id', (req, res) => {
   const itemId = parseInt(req.params.id)
-  const index = db.inventory.findIndex((item) => item.id === itemId)
+  const item = db.inventory.find((item) => item.id === itemId)
 
-  if (index === -1) {
+  if (item === undefined) {
     return res.status(404).send({ error: 'Item not found in database.' })
   }
 
-  db.inventory.splice(index, 1)
+  item.status = InventoryItemStatus.Discontinued
 
-  res.status(200).json({ message: 'Item deleted successfully' })
+  res.status(200).json({ message: 'Item discontinued successfully' })
 })
