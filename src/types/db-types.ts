@@ -29,7 +29,7 @@ export interface Order {
     quantity: number
   }>
   total_price: number
-  status: string
+  status: OrderStatus
 }
 
 export enum ProductionItemStatus {
