@@ -78,6 +78,16 @@ inventoryRouter.put('/:id', (req, res) => {
     item.price = req.body.price
   }
 
+  if (req.body.status !== undefined) {
+    if (isValidInventoryStatus(req.body.status)) {
+      item.status = req.body.status
+    } else {
+      return res.status(400).json({
+        error: 'Invalid request body. Please provide all required fields.'
+      })
+    }
+  }
+
   res.status(200).json({ message: 'Item updated successfully', item })
 })
 
