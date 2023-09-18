@@ -1,6 +1,6 @@
 import { Router, json } from 'express'
 import { type InventoryItem } from '../types/db-types'
-import { db, isAnyUndefined } from '../utils/utils'
+import { db, isAnyUndefined, isValidInventoryStatus } from '../utils/utils'
 
 export const inventoryRouter = Router()
 
@@ -25,11 +25,17 @@ inventoryRouter.get('/:id', (req, res) => {
 
 // Create a new inventory item
 inventoryRouter.post('/', (req, res) => {
-  const { name, category, quantity, price }: InventoryItem = req.body
+  const { name, category, quantity, price, status }: InventoryItem = req.body
 
-  if (isAnyUndefined(name, category, quantity, price)) {
+  if (isAnyUndefined(name, category, quantity, price, status)) {
     return res.status(400).json({
       error: 'Invalid request body. Please provide all required fields.'
+    })
+  }
+
+  if (!isValidInventoryStatus(status)) {
+    return res.status(400).json({
+      error: 'Invalid status provided.'
     })
   }
 
@@ -38,7 +44,8 @@ inventoryRouter.post('/', (req, res) => {
     name,
     category,
     quantity,
-    price
+    price,
+    status
   }
 
   db.inventory.push(item)
