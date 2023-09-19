@@ -18,6 +18,13 @@ describe('Inventory API', () => {
       expect(res.status).to.equal(200)
       expect(res.body).to.be.an('array')
     })
+
+    it('should return an error if the item does not exist', async () => {
+      const invalidItemId = 9999 // An ID that does not exist in the inventory
+      const res = await request(app).get(`/inventory/${invalidItemId}`)
+      expect(res.status).to.equal(404)
+      expect(res.body).to.have.property('error')
+    })
   })
 
   describe('POST /inventory', () => {
@@ -101,6 +108,19 @@ describe('Inventory API', () => {
       expect(res.status).to.equal(400)
       expect(res.body).to.have.property('error')
     })
+
+    it('should return an error if the item does not exist', async () => {
+      const invalidItemId = 9999 // An ID that does not exist in the inventory
+      const res = await request(app).put(`/inventory/${invalidItemId}`).send({
+        name: 'Updated Product',
+        category: 'Updated Category',
+        quantity: 20,
+        price: 30,
+        status: InventoryItemStatus.Available
+      })
+      expect(res.status).to.equal(404)
+      expect(res.body).to.have.property('error')
+    })
   })
 
   describe('DELETE /inventory/:id', () => {
@@ -126,31 +146,8 @@ describe('Inventory API', () => {
         'Item discontinued successfully'
       )
     })
-  })
 
-  // Failure cases for each route
-  describe('Failure Cases', () => {
-    it('GET /inventory/:id should return an error if the item does not exist', async () => {
-      const invalidItemId = 9999 // An ID that does not exist in the inventory
-      const res = await request(app).get(`/inventory/${invalidItemId}`)
-      expect(res.status).to.equal(404)
-      expect(res.body).to.have.property('error')
-    })
-
-    it('PUT /inventory/:id should return an error if the item does not exist', async () => {
-      const invalidItemId = 9999 // An ID that does not exist in the inventory
-      const res = await request(app).put(`/inventory/${invalidItemId}`).send({
-        name: 'Updated Product',
-        category: 'Updated Category',
-        quantity: 20,
-        price: 30,
-        status: InventoryItemStatus.Available
-      })
-      expect(res.status).to.equal(404)
-      expect(res.body).to.have.property('error')
-    })
-
-    it('DELETE /inventory/:id should return an error if the item does not exist', async () => {
+    it('should return an error if the item does not exist', async () => {
       const invalidItemId = 9999 // An ID that does not exist in the inventory
       const res = await request(app).delete(`/inventory/${invalidItemId}`)
       expect(res.status).to.equal(404)

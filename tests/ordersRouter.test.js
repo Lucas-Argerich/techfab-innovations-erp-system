@@ -18,6 +18,13 @@ describe('Orders API', () => {
       expect(res.status).to.equal(200)
       expect(res.body).to.be.an('array')
     })
+
+    it('should return an error if the order does not exist', async () => {
+      const invalidOrderId = 9999 // An ID that does not exist in the orders
+      const res = await request(app).get(`/orders/${invalidOrderId}`)
+      expect(res.status).to.equal(404)
+      expect(res.body).to.have.property('error')
+    })
   })
 
   describe('POST /orders', () => {
@@ -89,6 +96,20 @@ describe('Orders API', () => {
       expect(res.status).to.equal(400)
       expect(res.body).to.have.property('error')
     })
+
+    it('should return an error if the order does not exist', async () => {
+      const invalidOrderId = 9999 // An ID that does not exist in the orders
+      const res = await request(app)
+        .put(`/orders/${invalidOrderId}`)
+        .send({
+          customer_id: 2,
+          products: [{ product_id: 3, quantity: 3 }],
+          total_price: 150,
+          status: OrderStatus.Shipped
+        })
+      expect(res.status).to.equal(404)
+      expect(res.body).to.have.property('error')
+    })
   })
 
   describe('DELETE /orders/:id', () => {
@@ -116,32 +137,8 @@ describe('Orders API', () => {
         'Order marked as cancelled successfully'
       )
     })
-  })
 
-  // Failure cases for each route
-  describe('Failure Cases', () => {
-    it('GET /orders/:id should return an error if the order does not exist', async () => {
-      const invalidOrderId = 9999 // An ID that does not exist in the orders
-      const res = await request(app).get(`/orders/${invalidOrderId}`)
-      expect(res.status).to.equal(404)
-      expect(res.body).to.have.property('error')
-    })
-
-    it('PUT /orders/:id should return an error if the order does not exist', async () => {
-      const invalidOrderId = 9999 // An ID that does not exist in the orders
-      const res = await request(app)
-        .put(`/orders/${invalidOrderId}`)
-        .send({
-          customer_id: 2,
-          products: [{ product_id: 3, quantity: 3 }],
-          total_price: 150,
-          status: OrderStatus.Shipped
-        })
-      expect(res.status).to.equal(404)
-      expect(res.body).to.have.property('error')
-    })
-
-    it('DELETE /orders/:id should return an error if the order does not exist', async () => {
+    it('should return an error if the order does not exist', async () => {
       const invalidOrderId = 9999 // An ID that does not exist in the orders
       const res = await request(app).delete(`/orders/${invalidOrderId}`)
       expect(res.status).to.equal(404)
