@@ -83,7 +83,7 @@ inventoryRouter.put('/:id', (req, res) => {
       item.status = req.body.status
     } else {
       return res.status(400).json({
-        error: 'Invalid request body. Please provide all required fields.'
+        error: 'Invalid status provided.'
       })
     }
   }
