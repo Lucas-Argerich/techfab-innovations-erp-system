@@ -78,7 +78,7 @@ describe('Production API', () => {
       const newItem = {
         product_id: 999,
         quantity: 5,
-        status: 'InvalidStatus'
+        status: ProductionItemStatus.InProgress
       }
 
       const res = await request(app).post('/production').send(newItem)
