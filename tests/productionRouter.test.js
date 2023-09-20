@@ -70,7 +70,7 @@ describe('Production API', () => {
 
       const res = await request(app).post('/production').send(newItem)
 
-      expect(res.body).to.equal(400)
+      expect(res.status).to.equal(400)
       expect(res.body).to.have.property('error')
     })
 
@@ -83,7 +83,7 @@ describe('Production API', () => {
 
       const res = await request(app).post('/production').send(newItem)
 
-      expect(res.body).to.equal(400)
+      expect(res.status).to.equal(400)
       expect(res.body).to.have.property('error')
     })
   })
