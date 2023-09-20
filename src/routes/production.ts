@@ -3,7 +3,7 @@ import {
   db,
   isAnyUndefined,
   isInInventory,
-  isValidProductionItem
+  isValidProductionItemStatus
 } from '../utils/utils'
 import { ProductionItemStatus, type ProductionItem } from '../types/db-types'
 
@@ -33,7 +33,7 @@ productionRouter.post('/', (req, res) => {
     })
   }
 
-  if (!isValidProductionItem(status)) {
+  if (!isValidProductionItemStatus(status)) {
     return res.status(400).json({
       error: 'Invalid status provided.'
     })
@@ -84,7 +84,7 @@ productionRouter.put('/:id', (req, res) => {
   }
 
   if (status !== undefined) {
-    if (isValidProductionItem(status)) {
+    if (isValidProductionItemStatus(status)) {
       item.status = status
     } else {
       return res.status(400).json({ error: 'Invalid status provided.' })

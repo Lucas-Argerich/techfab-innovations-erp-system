@@ -29,3 +29,7 @@ export const isValidEmployeeStatus = (status: string): status is EmployeeStatus 
 export const isInInventory = (id: number): boolean => {
   return (id > 0 && id <= db.inventory.length)
 }
+
+export const isInOrders = (id: number): boolean => {
+  return (id > 0 && id <= db.orders.length)
+}
