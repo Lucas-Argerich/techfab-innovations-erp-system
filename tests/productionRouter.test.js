@@ -159,14 +159,14 @@ describe('Production API', () => {
       expect(res.status).to.equal(200)
       expect(res.body).to.have.property(
         'message',
-        'Production item cancelled successfully'
+        'Item cancelled successfully'
       )
 
       // Check if the status is changed to 'cancelled'
       const updatedProductionItem = await request(app).get(
         `/production/${itemId}`
       )
-      expect(updatedProductionItem.status).to.equal(
+      expect(updatedProductionItem.body.status).to.equal(
         ProductionItemStatus.Cancelled
       )
     })
