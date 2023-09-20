@@ -48,9 +48,9 @@ describe('Customers API', () => {
       expect(res.status).to.equal(201)
       expect(res.body).to.have.property(
         'message',
-        'Customer data created successfully'
+        'Customer data created successfully.'
       )
-      expect(res.body).to.have.property('item')
+      expect(res.body).to.have.property('data')
       expect(res.body.data).to.have.property('id')
       itemId = res.body.data.id
     })
@@ -62,6 +62,21 @@ describe('Customers API', () => {
       }
 
       const res = await request(app).post('/customers').send(invalidItem)
+
+      expect(res.status).to.equal(400)
+      expect(res.body).to.have.property('error')
+    })
+
+    it('should fail to create a customer with an invalid status', async () => {
+      const item = {
+        name: 'John Doe',
+        email: 'john.doe@example.com',
+        phone: '123-456-7890',
+        order_ids: [],
+        status: 'InvalidStatus'
+      }
+
+      const res = await request(app).post('/customers').send(item)
 
       expect(res.status).to.equal(400)
       expect(res.body).to.have.property('error')
@@ -96,7 +111,7 @@ describe('Customers API', () => {
       expect(res.status).to.equal(200)
       expect(res.body).to.have.property(
         'message',
-        'Customer data updated successfully'
+        'Customer data updated successfully.'
       )
       expect(res.body.data).to.deep.include(updatedItem)
     })
@@ -150,7 +165,7 @@ describe('Customers API', () => {
       expect(deleteResponse.status).to.equal(200)
       expect(deleteResponse.body).to.have.property(
         'message',
-        'Customer archived successfully'
+        'Customer archived successfully.'
       )
     })
 
