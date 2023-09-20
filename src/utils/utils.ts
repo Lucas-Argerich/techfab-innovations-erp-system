@@ -38,3 +38,21 @@ export const isValidEmail = (email: string) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   return emailRegex.test(email)
 }
+
+export const isValidPhoneNumber = (phone: string) => {
+  const phoneRegex1 = /^\d{10}$/ // 10-digit phone number
+  const phoneRegex2 = /^\d{3}-\d{3}-\d{4}$/ // XXX-XXX-XXXX format
+  const phoneRegex3 = /^\(\d{3}\) \d{3}-\d{4}$/ // (XXX) XXX-XXXX format
+  const phoneRegex4 = /^\+\d{1,3} \d{3}-\d{3}-\d{4}$/ // +XXX XXX-XXX-XXXX format
+  const phoneRegex5 = /^\d{2} \d{4}-\d{4}$/ // XX XXXX-XXXX format
+  const phoneRegex6 = /^\d{2} \d{8}$/ // XX XXXX-XXXX format
+
+  return (
+    phoneRegex1.test(phone) ||
+    phoneRegex2.test(phone) ||
+    phoneRegex3.test(phone) ||
+    phoneRegex4.test(phone) ||
+    phoneRegex5.test(phone) ||
+    phoneRegex6.test(phone)
+  )
+}
