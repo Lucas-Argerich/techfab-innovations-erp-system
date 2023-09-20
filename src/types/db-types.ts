@@ -53,12 +53,25 @@ interface Person {
   phone: string
 }
 
+export enum CustomerStatus {
+  Active = 'active',
+  Archived = 'archived'
+}
+
 export interface Customer extends Person {
   order_ids: number[]
+  status: CustomerStatus
+}
+
+export enum EmployeeStatus {
+  Active = 'active',
+  Suspended = 'suspended',
+  Terminated = 'terminated'
 }
 
 export interface Employee extends Person {
   position: string
+  status: EmployeeStatus
 }
 
 export interface Database {

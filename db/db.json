@@ -68,13 +68,7 @@
   ],
   "customers": [
     {
-      "id": 101,
-      "name": "John Doe",
-      "email": "john.doe@example.com",
-      "phone": "123-456-7890"
-    },
-    {
-      "id": 102,
+      "id": 1,
       "name": "Jane Smith",
       "email": "jane.smith@example.com",
       "phone": "987-654-3210"
@@ -82,14 +76,14 @@
   ],
   "employees": [
     {
-      "id": 201,
+      "id": 1,
       "name": "Alice Smith",
       "position": "Production Manager",
       "phone": "987-654-3210",
       "email": "alice.smith@example.com"
     },
     {
-      "id": 202,
+      "id": 2,
       "name": "Bob Johnson",
       "position": "Sales Representative",
       "phone": "555-555-5555",
