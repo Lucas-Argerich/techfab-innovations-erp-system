@@ -17,3 +17,7 @@ export const isValidOrderStatus = (status: string): status is OrderStatus => {
 export const isValidProductionItem = (status: string): status is ProductionItemStatus => {
   return Object.values(ProductionItemStatus).includes(status as ProductionItemStatus)
 }
+
+export const isInInventory = (id: number): boolean => {
+  return (id > 0 && id <= db.inventory.length)
+}
