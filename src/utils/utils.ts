@@ -33,3 +33,8 @@ export const isInInventory = (id: number): boolean => {
 export const isInOrders = (id: number): boolean => {
   return (id > 0 && id <= db.orders.length)
 }
+
+export const isValidEmail = (email: string) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailRegex.test(email)
+}
