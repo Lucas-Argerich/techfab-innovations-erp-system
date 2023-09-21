@@ -155,8 +155,8 @@ describe('Customers API', () => {
         status: CustomerStatus.Active
       }
 
-      const createResponse = await request(app).post('/inventory').send(newItem)
-      const createdItemId = createResponse.body.item.id
+      const createResponse = await request(app).post('/customers').send(newItem)
+      const createdItemId = createResponse.body.data.id
 
       const deleteResponse = await request(app).delete(
         `/customers/${createdItemId}`
@@ -171,7 +171,7 @@ describe('Customers API', () => {
 
     it('should fail to delete a customer with an invalid or non-existent ID', async () => {
       const invalidItemId = 9999
-      const res = await request(app).delete(`/inventory/${invalidItemId}`)
+      const res = await request(app).delete(`/customers/${invalidItemId}`)
       expect(res.status).to.equal(404)
       expect(res.body).to.have.property('error')
     })
