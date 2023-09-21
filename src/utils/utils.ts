@@ -30,8 +30,16 @@ export const isInInventory = (id: number): boolean => {
   return (id > 0 && id <= db.inventory.length)
 }
 
+export const areAllInInventory = (ids: number[]): boolean => {
+  return ids.every((id) => isInInventory(id))
+}
+
 export const isInOrders = (id: number): boolean => {
   return (id > 0 && id <= db.orders.length)
+}
+
+export const areAllInOrders = (ids: number[]): boolean => {
+  return ids.every((id) => isInOrders(id))
 }
 
 export const isValidEmail = (email: string) => {
