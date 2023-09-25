@@ -113,7 +113,7 @@ describe('Employees API', () => {
         .put(`/employees/${itemId}`)
         .send(updatedItem)
 
-      expect(res.status).to.equal(404)
+      expect(res.status).to.equal(400)
       expect(res.body).to.have.property('error')
     })
   })
