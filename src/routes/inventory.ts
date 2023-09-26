@@ -1,14 +1,13 @@
-import { Router, json } from 'express'
+import { Router } from 'express'
 import { InventoryItemStatus, type InventoryItem } from '../types/db-types'
 import { db, isAnyUndefined, isValidInventoryStatus } from '../utils/utils'
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants/messages'
 
 export const inventoryRouter = Router()
 
-inventoryRouter.use(json())
-
 // Get all inventory items
 inventoryRouter.get('/', (req, res) => {
-  res.json(db.inventory)
+  res.status(200).json(db.inventory)
 })
 
 // Get a specific inventory item by ID
@@ -17,10 +16,12 @@ inventoryRouter.get('/:id', (req, res) => {
   const item = db.inventory.find((item) => item.id === itemId)
 
   if (item === undefined) {
-    return res.status(404).send({ error: 'Item not found in database.' })
+    return res
+      .status(404)
+      .json({ error: ERROR_MESSAGES.ITEM_NOT_FOUND('inventory') })
   }
 
-  res.json(item)
+  res.status(200).json(item)
 })
 
 // Create a new inventory item
@@ -29,13 +30,13 @@ inventoryRouter.post('/', (req, res) => {
 
   if (isAnyUndefined(name, category, quantity, price, status)) {
     return res.status(400).json({
-      error: 'Invalid request body. Please provide all required fields.'
+      error: ERROR_MESSAGES.INVALID_REQUEST_BODY()
     })
   }
 
   if (!isValidInventoryStatus(status)) {
     return res.status(400).json({
-      error: 'Invalid status provided.'
+      error: ERROR_MESSAGES.INVALID_STATUS('inventory')
     })
   }
 
@@ -50,7 +51,9 @@ inventoryRouter.post('/', (req, res) => {
 
   db.inventory.push(item)
 
-  res.status(201).json({ message: 'Item created successfully', item })
+  res
+    .status(201)
+    .json({ message: SUCCESS_MESSAGES.ITEM_CREATE('inventory'), item })
 })
 
 // Update an existing inventory item
@@ -59,7 +62,9 @@ inventoryRouter.put('/:id', (req, res) => {
   const item = db.inventory.find((item) => item.id === itemId)
 
   if (item === undefined) {
-    return res.status(404).send({ error: 'Item not found in database.' })
+    return res
+      .status(404)
+      .send({ error: ERROR_MESSAGES.ITEM_NOT_FOUND('inventory') })
   }
 
   if (req.body.name !== undefined) {
@@ -83,24 +88,33 @@ inventoryRouter.put('/:id', (req, res) => {
       item.status = req.body.status
     } else {
       return res.status(400).json({
-        error: 'Invalid status provided.'
+        error: ERROR_MESSAGES.INVALID_STATUS('inventory')
       })
     }
   }
 
-  res.status(200).json({ message: 'Item updated successfully', item })
+  res
+    .status(200)
+    .json({ message: SUCCESS_MESSAGES.ITEM_UPDATE('inventory'), item })
 })
 
-// Delete a specific inventory item by ID (doesn't delete, changes status)
+// Discontinue a specific inventory item by ID
 inventoryRouter.delete('/:id', (req, res) => {
   const itemId = parseInt(req.params.id)
   const item = db.inventory.find((item) => item.id === itemId)
 
   if (item === undefined) {
-    return res.status(404).send({ error: 'Item not found in database.' })
+    return res
+      .status(404)
+      .send({ error: ERROR_MESSAGES.ITEM_NOT_FOUND('inventory') })
   }
 
   item.status = InventoryItemStatus.Discontinued
 
-  res.status(200).json({ message: 'Item discontinued successfully' })
+  res.status(200).json({
+    message: SUCCESS_MESSAGES.ITEM_DELETE(
+      'inventory',
+      InventoryItemStatus.Discontinued
+    )
+  })
 })

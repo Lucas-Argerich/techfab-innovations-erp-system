@@ -7,47 +7,53 @@ import {
   isValidPhoneNumber
 } from '../utils/utils'
 import { EmployeeStatus, type Employee } from '../types/db-types'
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants/messages'
 
 export const employeesRouter = Router()
 
+// Get all employee items
 employeesRouter.get('/', (req, res) => {
   res.status(200).json(db.employees)
 })
 
+// Get a specific employee item by ID
 employeesRouter.get('/:id', (req, res) => {
   const itemId = parseInt(req.params.id)
   const item = db.employees.find((item) => item.id === itemId)
 
   if (item === undefined) {
-    return res.status(404).json({ error: 'Item not found in database.' })
+    return res
+      .status(404)
+      .json({ error: ERROR_MESSAGES.ITEM_NOT_FOUND('employees') })
   }
 
   res.status(200).json(item)
 })
 
+// Create a new employee item
 employeesRouter.post('/', (req, res) => {
   const { name, email, phone, position, status }: Employee = req.body
 
   if (isAnyUndefined(name, email, phone, position, status)) {
     return res.status(400).json({
-      error: 'Invalid request body. Please provide all required fields.'
+      error: ERROR_MESSAGES.INVALID_REQUEST_BODY()
     })
   }
 
   if (!isValidEmail(email)) {
-    return res
-      .status(400)
-      .json({ error: 'Invalid email address. Please provide a valid email.' })
+    return res.status(400).json({ error: ERROR_MESSAGES.INVALID_EMAIL() })
   }
 
   if (!isValidPhoneNumber(phone)) {
     return res.status(400).json({
-      error: 'Invalid phone number. Please provide a valid phone number.'
+      error: ERROR_MESSAGES.INVALID_PHONE()
     })
   }
 
   if (!isValidEmployeeStatus(status)) {
-    return res.status(400).json({ error: 'Invalid status provided.' })
+    return res
+      .status(400)
+      .json({ error: ERROR_MESSAGES.INVALID_STATUS('employees') })
   }
 
   const newItem: Employee = {
@@ -63,15 +69,18 @@ employeesRouter.post('/', (req, res) => {
 
   res
     .status(201)
-    .json({ message: 'Employee data created successfully.', data: newItem })
+    .json({ message: SUCCESS_MESSAGES.ITEM_CREATE('employees'), data: newItem })
 })
 
+// Update an existing employee item
 employeesRouter.put('/:id', (req, res) => {
   const itemId = parseInt(req.params.id)
   const item = db.employees.find((item) => item.id === itemId)
 
   if (item === undefined) {
-    return res.status(404).json({ error: 'Item not found in database.' })
+    return res
+      .status(404)
+      .json({ error: ERROR_MESSAGES.ITEM_NOT_FOUND('employees') })
   }
 
   const { name, email, phone, position, status }: Employee = req.body
@@ -84,7 +93,7 @@ employeesRouter.put('/:id', (req, res) => {
     if (isValidEmail(email)) {
       item.email = email
     } else {
-      return res.status(400).json({ error: 'Invalid email address.' })
+      return res.status(400).json({ error: ERROR_MESSAGES.INVALID_EMAIL() })
     }
   }
 
@@ -93,7 +102,7 @@ employeesRouter.put('/:id', (req, res) => {
       item.phone = phone
     } else {
       return res.status(400).json({
-        error: 'Invalid phone number.'
+        error: ERROR_MESSAGES.INVALID_PHONE()
       })
     }
   }
@@ -106,24 +115,36 @@ employeesRouter.put('/:id', (req, res) => {
     if (isValidEmployeeStatus(status)) {
       item.status = status
     } else {
-      return res.status(400).json({ error: 'Invalid status provided.' })
+      return res
+        .status(400)
+        .json({ error: ERROR_MESSAGES.INVALID_STATUS('employees') })
     }
   }
 
-  res.status(200).json({ message: 'Employee data updated successfully.', data: item })
+  res
+    .status(200)
+    .json({ message: SUCCESS_MESSAGES.ITEM_UPDATE('employees'), data: item })
 })
 
+// Terminate a specific employee item by ID
 employeesRouter.delete('/:id', (req, res) => {
   const itemId = parseInt(req.params.id)
   const item = db.employees.find((item) => item.id === itemId)
 
   if (item === undefined) {
-    return res.status(404).json({ error: 'Item not found in database.' })
+    return res
+      .status(404)
+      .json({ error: ERROR_MESSAGES.ITEM_NOT_FOUND('employees') })
   }
 
   item.status = EmployeeStatus.Terminated
 
-  res.status(200).json({ message: 'Employee terminated successfully.' })
+  res
+    .status(200)
+    .json({
+      message: SUCCESS_MESSAGES.ITEM_DELETE(
+        'employees',
+        EmployeeStatus.Terminated
+      )
+    })
 })
-
-// TODO: Remember to standardize all error messages in all the routes

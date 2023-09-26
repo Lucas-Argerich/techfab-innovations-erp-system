@@ -6,7 +6,7 @@ export const ordersRouter = Router()
 
 ordersRouter.use(json())
 
-// Get all orders
+// Get all order items
 ordersRouter.get('/', (req, res) => {
   res.json(db.orders)
 })
@@ -23,7 +23,7 @@ ordersRouter.get('/:id', (req, res) => {
   res.json(item)
 })
 
-// Create a new order
+// Create a new order item
 ordersRouter.post('/', (req, res) => {
   const {
     customer_id: customerId,
@@ -55,7 +55,7 @@ ordersRouter.post('/', (req, res) => {
   res.status(201).json({ message: 'Order created successfully', order })
 })
 
-// Update an existing order
+// Update an existing order item
 ordersRouter.put('/:id', (req, res) => {
   const itemId = parseInt(req.params.id)
   const item = db.orders.find((item) => item.id === itemId)
@@ -87,7 +87,7 @@ ordersRouter.put('/:id', (req, res) => {
   res.status(200).json({ message: 'Order updated successfully', order: item })
 })
 
-// Delete a specific order by ID (doesn't delete, changes status)
+// Cancel a specific order item by ID
 ordersRouter.delete('/:id', (req, res) => {
   const itemId = parseInt(req.params.id)
   const item = db.orders.find((item) => item.id === itemId)
