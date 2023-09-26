@@ -1,4 +1,4 @@
-import { Router } from 'express'
+import { Router, json } from 'express'
 import {
   areAllInOrders,
   db,
@@ -11,6 +11,8 @@ import { CustomerStatus, type Customer } from '../types/db-types'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants/messages'
 
 export const customersRouter = Router()
+
+customersRouter.use(json())
 
 // Get all customer items
 customersRouter.get('/', (req, res) => {

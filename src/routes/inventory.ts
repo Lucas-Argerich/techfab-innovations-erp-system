@@ -1,9 +1,11 @@
-import { Router } from 'express'
+import { Router, json } from 'express'
 import { InventoryItemStatus, type InventoryItem } from '../types/db-types'
 import { db, isAnyUndefined, isValidInventoryStatus } from '../utils/utils'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants/messages'
 
 export const inventoryRouter = Router()
+
+inventoryRouter.use(json())
 
 // Get all inventory items
 inventoryRouter.get('/', (req, res) => {
@@ -66,6 +68,8 @@ inventoryRouter.put('/:id', (req, res) => {
       .status(404)
       .send({ error: ERROR_MESSAGES.ITEM_NOT_FOUND('inventory') })
   }
+
+  console.log('Body:', req.body)
 
   if (req.body.name !== undefined) {
     item.name = req.body.name

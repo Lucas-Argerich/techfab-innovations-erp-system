@@ -1,4 +1,4 @@
-import { Router } from 'express'
+import { Router, json } from 'express'
 import {
   db,
   isAnyUndefined,
@@ -10,6 +10,8 @@ import { EmployeeStatus, type Employee } from '../types/db-types'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants/messages'
 
 export const employeesRouter = Router()
+
+employeesRouter.use(json())
 
 // Get all employee items
 employeesRouter.get('/', (req, res) => {

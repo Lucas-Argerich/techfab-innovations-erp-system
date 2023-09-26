@@ -1,4 +1,4 @@
-import { Router } from 'express'
+import { Router, json } from 'express'
 import {
   db,
   isAnyUndefined,
@@ -9,6 +9,8 @@ import { ProductionItemStatus, type ProductionItem } from '../types/db-types'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants/messages'
 
 export const productionRouter = Router()
+
+productionRouter.use(json())
 
 // Get all production items
 productionRouter.get('/', (req, res) => {
