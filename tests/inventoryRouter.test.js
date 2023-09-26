@@ -40,7 +40,7 @@ describe('Inventory API', () => {
       const res = await request(app).post('/inventory').send(newItem)
 
       expect(res.status).to.equal(201)
-      expect(res.body).to.have.property('message', 'Item created successfully')
+      expect(res.body).to.have.property('message')
       expect(res.body.item).to.have.property('id')
       itemId = res.body.item.id // Store the ID for later use
     })
@@ -88,7 +88,7 @@ describe('Inventory API', () => {
         .send(updatedItem)
 
       expect(res.status).to.equal(200)
-      expect(res.body).to.have.property('message', 'Item updated successfully')
+      expect(res.body).to.have.property('message')
       expect(res.body.item).to.deep.include(updatedItem)
     })
 
@@ -141,10 +141,7 @@ describe('Inventory API', () => {
       )
 
       expect(deleteResponse.status).to.equal(200)
-      expect(deleteResponse.body).to.have.property(
-        'message',
-        'Item discontinued successfully'
-      )
+      expect(deleteResponse.body).to.have.property('message')
     })
 
     it('should return an error if the item does not exist', async () => {

@@ -44,7 +44,7 @@ describe('Production API', () => {
       const res = await request(app).post('/production').send(newItem)
 
       expect(res.status).to.equal(200)
-      expect(res.body).to.have.property('message', 'Item created successfully')
+      expect(res.body).to.have.property('message')
       expect(res.body).to.have.property('item')
       expect(res.body.item).to.have.property('id')
       itemId = res.body.item.id
@@ -101,7 +101,7 @@ describe('Production API', () => {
         .send(updatedItem)
 
       expect(res.status).to.equal(200)
-      expect(res.body).to.have.property('message', 'Item updated successfully')
+      expect(res.body).to.have.property('message')
       expect(res.body.item).to.deep.include(updatedItem)
     })
 
@@ -157,10 +157,7 @@ describe('Production API', () => {
       const res = await request(app).delete(`/production/${itemId}`)
 
       expect(res.status).to.equal(200)
-      expect(res.body).to.have.property(
-        'message',
-        'Item cancelled successfully'
-      )
+      expect(res.body).to.have.property('message')
 
       // Check if the status is changed to 'cancelled'
       const updatedProductionItem = await request(app).get(

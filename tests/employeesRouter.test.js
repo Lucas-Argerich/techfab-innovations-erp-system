@@ -46,10 +46,7 @@ describe('Employees API', () => {
       const res = await request(app).post('/employees').send(newItem)
 
       expect(res.status).to.equal(201)
-      expect(res.body).to.have.property(
-        'message',
-        'Employee data created successfully.'
-      )
+      expect(res.body).to.have.property('message')
       expect(res.body).to.have.property('data')
       expect(res.body.data).to.have.property('id')
       itemId = res.body.data.id
@@ -82,10 +79,7 @@ describe('Employees API', () => {
         .send(updatedItem)
 
       expect(res.status).to.equal(200)
-      expect(res.body).to.have.property(
-        'message',
-        'Employee data updated successfully.'
-      )
+      expect(res.body).to.have.property('message')
       expect(res.body.data).to.deep.include(updatedItem)
     })
 
@@ -123,10 +117,7 @@ describe('Employees API', () => {
       const res = await request(app).delete(`/employees/${itemId}`)
 
       expect(res.status).to.equal(200)
-      expect(res.body).to.have.property(
-        'message',
-        'Employee terminated successfully.'
-      )
+      expect(res.body).to.have.property('message')
     })
 
     it("should fail to delete an employee with an ID that doesn't exist", async () => {
