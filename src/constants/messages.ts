@@ -29,8 +29,8 @@ export const SUCCESS_MESSAGES = {
     `The ${capitalize(type)} item was retrieved successfully.`,
   ITEM_UPDATE: (type: keyof Database) =>
     `The ${capitalize(type)} item was updated successfully.`,
-  ITEM_DELETE: (type: keyof Database) =>
-    `The ${capitalize(type)} item was deleted successfully.`,
+  ITEM_DELETE: (type: keyof Database, action: string) =>
+    `The ${capitalize(type)} item was ${action} successfully.`,
   ACTION: () => 'The action was completed successfully.'
 }
 
