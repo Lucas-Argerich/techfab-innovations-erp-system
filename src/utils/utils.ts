@@ -27,7 +27,7 @@ export const isValidEmployeeStatus = (status: string): status is EmployeeStatus 
 }
 
 export const isInInventory = (id: number): boolean => {
-  return (id > 0 && id <= db.inventory.length)
+  return (id > 0 && id <= db.inventory.length) // Will be done using the model
 }
 
 export const areAllInInventory = (ids: number[]): boolean => {
@@ -35,7 +35,7 @@ export const areAllInInventory = (ids: number[]): boolean => {
 }
 
 export const isInOrders = (id: number): boolean => {
-  return (id > 0 && id <= db.orders.length)
+  return (id > 0 && id <= db.orders.length) // Will be done using the model
 }
 
 export const areAllInOrders = (ids: number[]): boolean => {
@@ -66,3 +66,15 @@ export const isValidPhoneNumber = (phone: string) => {
 }
 
 export const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1)
+
+export const filterReqBody = (obj: Record<string, any>) => {
+  const filtered: Record<string, any> = {}
+
+  for (const [key, value] of Object.entries(obj)) {
+    if (key !== 'id' && value !== undefined) {
+      filtered[key] = value
+    }
+  }
+
+  return filtered
+}
