@@ -17,7 +17,15 @@ export const ERROR_MESSAGES = {
   INVALID_EMAIL: () =>
     'The provided email address is not in a valid format. Please provide a valid email address.',
   INVALID_PHONE: () =>
-    'The provided phone number is not in a valid format. Please provide a valid phone number.'
+    'The provided phone number is not in a valid format. Please provide a valid phone number.',
+  FAILED_TO_GET: (type: keyof Database) =>
+    `Unable to get the ${capitalize(type)} item due to an internal server error. Please try again later.`,
+  FAILED_TO_CREATE: (type: keyof Database) =>
+    `Unable to create the ${capitalize(type)} item due to an internal server error. Please try again later.`,
+  FAILED_TO_UPDATE: (type: keyof Database) =>
+    `Unable to update the ${capitalize(type)} item due to an internal server error. Please try again later.`,
+  FAILED_TO_DELETE: (type: keyof Database) =>
+    `Unable to delete the ${capitalize(type)} item due to an internal server error. Please try again later.`
 }
 
 Object.freeze(ERROR_MESSAGES)
