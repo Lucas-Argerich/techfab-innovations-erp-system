@@ -1,6 +1,5 @@
 import { type NextFunction, type Request, type Response } from 'express'
-import { employeeModel } from '../models/employee'
-import { type Employee } from '../types/db-types'
+import { employeeModel } from '../models/json/employee'
 import {
   filterReqBody,
   isAnyUndefined,
@@ -29,8 +28,7 @@ export const employeesController = {
       .catch(next)
   },
   post: (req: Request, res: Response, next: NextFunction) => {
-    const { name, email, phone, position, status }: Omit<Employee, 'id'> =
-      req.body
+    const { name, email, phone, position, status } = req.body
 
     if (isAnyUndefined(name, email, phone, position, status)) {
       return res.status(400).json({
@@ -70,13 +68,7 @@ export const employeesController = {
   put: (req: Request, res: Response, next: NextFunction) => {
     const id = parseInt(req.params.id)
 
-    const {
-      name,
-      email,
-      phone,
-      position,
-      status
-    }: Partial<Omit<Employee, 'id'>> = req.body
+    const { name, email, phone, position, status } = req.body
 
     if (email !== undefined && !isValidEmail(email)) {
       return res.status(400).json({ error: ERROR_MESSAGES.INVALID_EMAIL() })

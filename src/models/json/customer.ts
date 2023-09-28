@@ -1,6 +1,6 @@
-import { ItemNotFound } from '../constants/errors'
-import { type Customer } from '../types/db-types'
-import { db } from '../utils/utils'
+import { ItemNotFound } from '../../constants/errors'
+import { type Customer } from '../../types/db-types'
+import { db } from '../../utils/utils'
 
 export const customerModel = {
   readAll: async () => {

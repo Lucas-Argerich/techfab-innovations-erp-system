@@ -1,6 +1,6 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants/messages'
-import { customerModel } from '../models/customer'
+import { customerModel } from '../models/json/customer'
 import {
   areAllInOrders,
   filterReqBody,
@@ -9,7 +9,6 @@ import {
   isValidEmail,
   isValidPhoneNumber
 } from '../utils/utils'
-import { type Customer } from '../types/db-types'
 
 export const customersController = {
   getAll: (req: Request, res: Response, next: NextFunction) => {
@@ -77,13 +76,7 @@ export const customersController = {
   put: (req: Request, res: Response, next: NextFunction) => {
     const id = parseInt(req.params.id)
 
-    const {
-      name,
-      email,
-      phone,
-      order_ids: orderIds,
-      status
-    }: Partial<Omit<Customer, 'id'>> = req.body
+    const { name, email, phone, order_ids: orderIds, status } = req.body
 
     if (email !== undefined && !isValidEmail(email)) {
       return res.status(400).json({ error: ERROR_MESSAGES.INVALID_EMAIL() })

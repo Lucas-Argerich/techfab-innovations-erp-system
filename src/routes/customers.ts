@@ -18,7 +18,7 @@ customersRouter.post('/', customersController.post)
 // Update an existing customer item
 customersRouter.put('/:id', customersController.put)
 
-// Archive a specific customer item by ID
+// Delete a specific customer item by ID
 customersRouter.delete('/:id', customersController.delete)
 
 customersRouter.use(errorHandler)

@@ -18,7 +18,7 @@ employeesRouter.post('/', employeesController.post)
 // Update an existing employee item
 employeesRouter.put('/:id', employeesController.put)
 
-// Terminate a specific employee item by ID
+// Delete a specific employee item by ID
 employeesRouter.delete('/:id', employeesController.delete)
 
 employeesRouter.use(errorHandler)
