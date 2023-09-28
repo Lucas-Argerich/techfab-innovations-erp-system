@@ -41,8 +41,8 @@ describe('Inventory API', () => {
 
       expect(res.status).to.equal(201)
       expect(res.body).to.have.property('message')
-      expect(res.body.item).to.have.property('id')
-      itemId = res.body.item.id // Store the ID for later use
+      expect(res.body.data).to.have.property('id')
+      itemId = res.body.data.id // Store the ID for later use
     })
 
     it('should fail to create a new inventory item with missing fields', async () => {
@@ -89,7 +89,7 @@ describe('Inventory API', () => {
 
       expect(res.status).to.equal(200)
       expect(res.body).to.have.property('message')
-      expect(res.body.item).to.deep.include(updatedItem)
+      expect(res.body.data).to.deep.include(updatedItem)
     })
 
     it('should fail to update an inventory item with an invalid status', async () => {
@@ -134,7 +134,7 @@ describe('Inventory API', () => {
       }
 
       const createResponse = await request(app).post('/inventory').send(newItem)
-      const createdItemId = createResponse.body.item.id
+      const createdItemId = createResponse.body.data.id
 
       const deleteResponse = await request(app).delete(
         `/inventory/${createdItemId}`
