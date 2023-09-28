@@ -10,7 +10,7 @@ export const customerModel = {
     const item = db.customers.find((item) => item.id === id)
 
     if (item === undefined) {
-      throw new ItemNotFound(id, { typeName: 'customers', method: 'get' })
+      throw new ItemNotFound(id, { typeName: 'customers', method: 'read' })
     }
 
     return item

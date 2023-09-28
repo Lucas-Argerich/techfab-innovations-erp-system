@@ -18,7 +18,7 @@ export const ERROR_MESSAGES = {
     'The provided email address is not in a valid format. Please provide a valid email address.',
   INVALID_PHONE: () =>
     'The provided phone number is not in a valid format. Please provide a valid phone number.',
-  FAILED_TO: (type?: keyof Database, method?: 'get' | 'create' | 'update' | 'delete') =>
+  FAILED_TO: (type?: keyof Database, method?: 'read' | 'create' | 'update' | 'delete') =>
     `Unable to ${method ?? '[unknown]'} the ${capitalize(type ?? '[unknown]')} item due to an internal server error. Please try again later.`
 }
 

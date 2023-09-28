@@ -2,12 +2,12 @@ import { type Database } from '../types/db-types'
 
 export class ModelError extends Error {
   typeName?: keyof Database
-  method?: 'get' | 'create' | 'update' | 'delete'
+  method?: 'read' | 'create' | 'update' | 'delete'
 
   constructor (
     options: {
       typeName?: keyof Database
-      method?: 'get' | 'create' | 'update' | 'delete'
+      method?: 'read' | 'create' | 'update' | 'delete'
     } = {}
   ) {
     super()
@@ -22,7 +22,7 @@ export class ItemNotFound extends ModelError {
     id: number,
     options: {
       typeName?: keyof Database
-      method?: 'get' | 'create' | 'update' | 'delete'
+      method?: 'read' | 'create' | 'update' | 'delete'
     } = {}
   ) {
     super(options)
