@@ -39,6 +39,18 @@ export const customersController = {
       })
     }
 
+    if (!isValidEmail(email)) {
+      return res.status(400).json({
+        error: ERROR_MESSAGES.INVALID_EMAIL()
+      })
+    }
+
+    if (!isValidPhoneNumber(phone)) {
+      return res.status(400).json({
+        error: ERROR_MESSAGES.INVALID_PHONE()
+      })
+    }
+
     if (!isValidCustomerStatus(status)) {
       return res
         .status(400)
@@ -71,7 +83,7 @@ export const customersController = {
       phone,
       order_ids: orderIds,
       status
-    }: Partial<Customer> = req.body
+    }: Partial<Omit<Customer, 'id'>> = req.body
 
     if (email !== undefined && !isValidEmail(email)) {
       return res.status(400).json({ error: ERROR_MESSAGES.INVALID_EMAIL() })
