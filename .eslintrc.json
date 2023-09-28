@@ -28,7 +28,7 @@
     "sourceType": "script"
   },
   "rules": {
-    "no-unused-vars": "off",
+    "no-unused-vars": "warn",
     "no-trailing-spaces": "warn",
     "padded-blocks": "warn",
     "eol-last": "warn",
