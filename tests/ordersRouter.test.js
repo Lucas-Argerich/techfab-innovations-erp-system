@@ -43,8 +43,8 @@ describe('Orders API', () => {
 
       expect(res.status).to.equal(201)
       expect(res.body).to.have.property('message')
-      expect(res.body.order).to.have.property('id')
-      orderId = res.body.order.id // Store the ID for later use
+      expect(res.body.data).to.have.property('id')
+      orderId = res.body.data.id // Store the ID for later use
     })
 
     it('should fail to create a new order with an invalid status', async () => {
@@ -68,7 +68,7 @@ describe('Orders API', () => {
   describe('PUT /orders/:id', () => {
     it('should update an existing order with a valid status', async () => {
       const updatedOrder = {
-        customer_id: 2,
+        customer_id: 1,
         products: [{ product_id: 3, quantity: 3 }],
         total_price: 150,
         status: OrderStatus.Shipped
@@ -83,7 +83,7 @@ describe('Orders API', () => {
 
     it('should fail to update an order with an invalid status', async () => {
       const updatedOrder = {
-        customer_id: 2,
+        customer_id: 1,
         products: [{ product_id: 3, quantity: 3 }],
         total_price: 150,
         status: 'InvalidStatus' // Invalid OrderStatus
@@ -125,7 +125,7 @@ describe('Orders API', () => {
       }
 
       const createResponse = await request(app).post('/orders').send(newOrder)
-      const createdOrderId = createResponse.body.order.id
+      const createdOrderId = createResponse.body.data.id
 
       const deleteResponse = await request(app).delete(
         `/orders/${createdOrderId}`
