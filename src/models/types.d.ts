@@ -1,3 +1,33 @@
+// expected models return types
+
+interface Person {
+  id: number
+  name: string
+  email: string
+  phone: string
+}
+
+export enum CustomerStatus {
+  Active = 'active',
+  Archived = 'archived'
+}
+
+export interface Customer extends Person {
+  status: CustomerStatus
+  orders: () => Promise<Order[]>
+}
+
+export enum EmployeeStatus {
+  Active = 'active',
+  Suspended = 'suspended',
+  Terminated = 'terminated'
+}
+
+export interface Employee extends Person {
+  position: string
+  status: EmployeeStatus
+}
+
 export enum InventoryItemStatus {
   Available = 'available',
   OutOfStock = 'out of stock',
@@ -23,13 +53,13 @@ export enum OrderStatus {
 
 export interface Order {
   id: number
-  customer_id: number
   products: Array<{
-    product_id: number
     quantity: number
+    product: () => Promise<InventoryItem>
   }>
   total_price: number
   status: OrderStatus
+  customer: () => Promise<Customer>
 }
 
 export enum ProductionItemStatus {
@@ -41,43 +71,7 @@ export enum ProductionItemStatus {
 
 export interface ProductionItem {
   id: number
-  product_id: number
   quantity: number
   status: ProductionItemStatus
-}
-
-interface Person {
-  id: number
-  name: string
-  email: string
-  phone: string
-}
-
-export enum CustomerStatus {
-  Active = 'active',
-  Archived = 'archived'
-}
-
-export interface Customer extends Person {
-  order_ids: number[]
-  status: CustomerStatus
-}
-
-export enum EmployeeStatus {
-  Active = 'active',
-  Suspended = 'suspended',
-  Terminated = 'terminated'
-}
-
-export interface Employee extends Person {
-  position: string
-  status: EmployeeStatus
-}
-
-export interface Database {
-  inventory: InventoryItem[]
-  orders: Order[]
-  production: ProductionItem[]
-  customers: Customer[]
-  employees: Employee[]
+  product: () => Promise<InventoryItem>
 }
