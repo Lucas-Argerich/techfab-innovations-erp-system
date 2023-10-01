@@ -1,7 +1,4 @@
 import { Router, json } from 'express'
-import { InventoryItemStatus, type InventoryItem } from '../types/db-types'
-import { db, isAnyUndefined, isValidInventoryStatus } from '../utils/utils'
-import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants/messages'
 import { inventoryController } from '../controllers/inventory'
 import { errorHandler } from '../middlewares/errorHandler'
 
