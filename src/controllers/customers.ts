@@ -1,6 +1,7 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants/messages'
-import { customerModel } from '../models/json/customer'
+// import { customerModel } from '../models/json/customer'
+import { customerModel } from '../models/SQLServer/customer'
 import {
   areAllInOrders,
   filterReqBody,
@@ -30,9 +31,9 @@ export const customersController = {
       .catch(next)
   },
   post: (req: Request, res: Response, next: NextFunction) => {
-    const { name, email, phone, order_ids: orderIds, status } = req.body
+    const { name, email, phone, status } = req.body
 
-    if (isAnyUndefined(name, email, phone, orderIds, status)) {
+    if (isAnyUndefined(name, email, phone, status)) {
       return res.status(400).json({
         error: ERROR_MESSAGES.INVALID_REQUEST_BODY()
       })
@@ -56,13 +57,7 @@ export const customersController = {
         .json({ error: ERROR_MESSAGES.INVALID_STATUS('customers') })
     }
 
-    if (!areAllInOrders(orderIds)) {
-      return res
-        .status(400)
-        .json({ error: ERROR_MESSAGES.ITEM_NOT_FOUND('customers') })
-    }
-
-    const input = { name, email, phone, order_ids: orderIds, status }
+    const input = { name, email, phone, status }
 
     customerModel
       .create(input)
