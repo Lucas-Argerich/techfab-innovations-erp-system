@@ -78,21 +78,6 @@ describe('Customers API', () => {
       expect(res.status).to.equal(400)
       expect(res.body).to.have.property('error')
     })
-
-    it('should fail to create a customer when some id in order_ids is not in the orders db', async () => {
-      const item = {
-        name: 'John Doe',
-        email: 'john.doe@example.com',
-        phone: '123-456-7890',
-        order_ids: [9999],
-        status: CustomerStatus.Active
-      }
-
-      const res = await request(app).post('/customers').send(item)
-
-      expect(res.status).to.equal(400)
-      expect(res.body).to.have.property('error')
-    })
   })
 
   describe('PUT /customers/:id', () => {

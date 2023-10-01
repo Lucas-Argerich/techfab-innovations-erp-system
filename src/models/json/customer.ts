@@ -15,10 +15,10 @@ export const customerModel = {
 
     return item
   },
-  create: async (input: Omit<Customer, 'id'>) => {
+  create: async (input: Omit<Customer, 'id' | 'order_ids'>) => {
     const id = db.customers.length + 1
 
-    db.customers.push({ id, ...input })
+    db.customers.push({ id, ...input, order_ids: [] })
 
     return await customerModel.read(id)
   },
