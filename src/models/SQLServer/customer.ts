@@ -1,76 +1,85 @@
 import { ItemNotFound } from '../../constants/errors'
-import { type Customer } from '../../types/db-types'
+import mssqlConfig from '../../constants/mssqlConfig'
 import sql from 'mssql'
+import {
+  type CustomersStatusTable,
+  type CustomersTable
+} from './types'
+import { type Customer, type CustomerStatus } from '../types'
+import { orderModel } from './order'
 
-const config = {
-  user: 'techfab',
-  password: 'rootroot',
-  server: 'localhost',
-  database: 'TECHFAB_ERP',
-  options: {
-    encrypt: true, // Encrypt the connection
-    trustServerCertificate: true // Trust the self-signed certificate
+const connection = sql.connect(mssqlConfig)
+
+class customerModel {
+  private static async customersTableToCustomer (
+    rawCustomer: CustomersTable
+  ): Promise<Customer> {
+    const { id, name, email, phone, status_id: statusId } = rawCustomer
+
+    const status = await this.readStatus(statusId)
+
+    const getOrders = async () => await orderModel.readByCustomerId(id)
+
+    return { id, name, email, phone, status, orders: getOrders }
   }
-}
 
-const connection = sql.connect(config)
-
-export const customerModel = {
-  readAll: async () => {
-    const result = await (await connection).query('SELECT * FROM customers')
-    return result.recordset
-  },
-  read: async (id: number) => {
-    const customerQuery = await (
-      await connection
-    ).query`SELECT * FROM Customers WHERE id = ${id}`
-
-    if (customerQuery.recordset.length === 0) {
-      throw new ItemNotFound(id, { typeName: 'customers', method: 'read' })
-    }
-
-    const {
-      name,
-      email,
-      phone,
-      status_id: statusId
-    } = customerQuery.recordset[0]
-
-    const ordersQuery = await (
-      await connection
-    ).query`SELECT * FROM Orders WHERE customer_id = ${id}`
-    const orderIds = ordersQuery.recordset.map((order) => order.id)
-
+  private static async readStatus (statusId: number): Promise<CustomerStatus> {
     const statusQuery = await (
       await connection
-    ).query`SELECT status FROM CustomersStatus WHERE id = ${statusId}`
-    const status = statusQuery.recordset[0].status
+    )
+      .query<CustomersStatusTable>`SELECT * FROM CustomersStatus WHERE id = ${statusId}`
 
-    return { id, name, email, phone, order_ids: orderIds, status }
-  },
-  create: async (input: Omit<Customer, 'id' | 'order_ids'>) => {
+    const status = statusQuery.recordset[0].status as CustomerStatus
+
+    return status
+  }
+
+  static async readAll (): Promise<Customer[]> {
+    const selectAllQuery = await (
+      await connection
+    ).query<CustomersTable>('SELECT * FROM customers')
+
+    const customers = await Promise.all(
+      selectAllQuery.recordset.map(this.customersTableToCustomer)
+    )
+
+    return customers
+  }
+
+  static async read (id: number): Promise<Customer> {
+    const customerQuery = await (
+      await connection
+    ).query<CustomersTable>`SELECT id FROM Customers WHERE id = ${id}`
+    const rawCustomer = customerQuery.recordset[0]
+
+    const customer = await this.customersTableToCustomer(rawCustomer)
+
+    return customer
+  }
+
+  static async create (input: Omit<Customer, 'id, orders'>): Promise<Customer> {
     const { name, email, phone, status } = input
 
     const statusIdQuery = await (
       await connection
-    ).query`
-    SELECT * FROM CustomersStatus WHERE status = ${status}
-    `
-
+    ).query<
+      Pick<CustomersStatusTable, 'id'>
+    >`SELECT id FROM CustomersStatus WHERE status = ${status}`
     const statusId = statusIdQuery.recordset[0].id
 
-    const customerInsert = await (
+    const insertQuery = await (
       await connection
-    ).query`
-    INSERT INTO Customers (name, email, phone, status_id)
-    VALUES (${name}, ${email}, ${phone}, ${statusId})
-    SELECT SCOPE_IDENTITY() AS id`
+    ).query<Pick<Customer, 'id'>>`
+      INSERT INTO Customers (name, email, phone, status_id) 
+      VALUES (${name}, ${email}, ${phone}, ${statusId}) 
+      SELECT SCOPE_IDENTITY() AS id`
 
-    const id = customerInsert.recordset[0].id
+    const id = insertQuery.recordset[0].id
 
-    return await customerModel.read(id)
-  },
-  update: async (id: number, input: Partial<Omit<Customer, 'id'>>) => {
+    return await this.read(id)
+  }
+
+  static async update (id: number, input: Partial<Omit<Customer, 'id' | 'orders'>>): Promise<Customer> {
     const request = (await connection).request()
 
     const keys = Object.keys(input) as Array<keyof typeof input>
@@ -90,9 +99,10 @@ export const customerModel = {
       throw new ItemNotFound(id, { typeName: 'customers', method: 'update' })
     }
 
-    return await customerModel.read(id)
-  },
-  delete: async (id: number) => {
+    return await this.read(id)
+  }
+
+  static async delete (id: number): Promise<void> {
     const deleteQuery = await (
       await connection
     ).query`DELETE FROM Customers WHERE id = ${id}`
@@ -102,3 +112,5 @@ export const customerModel = {
     }
   }
 }
+
+export default customerModel
