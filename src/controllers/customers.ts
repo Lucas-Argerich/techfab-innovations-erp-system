@@ -1,15 +1,15 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants/messages'
 // import { customerModel } from '../models/json/customer'
-import { customerModel } from '../models/SQLServer/customer'
+import customerModel from '../models/SQLServer/customer'
 import {
-  areAllInOrders,
   filterReqBody,
   isAnyUndefined,
   isValidCustomerStatus,
   isValidEmail,
   isValidPhoneNumber
 } from '../utils/utils'
+import { type Customer } from '../models/types'
 
 export const customersController = {
   getAll: (req: Request, res: Response, next: NextFunction) => {
@@ -31,7 +31,7 @@ export const customersController = {
       .catch(next)
   },
   post: (req: Request, res: Response, next: NextFunction) => {
-    const { name, email, phone, status } = req.body
+    const { name, email, phone, status }: Omit<Customer, 'id' | 'orders'> = req.body
 
     if (isAnyUndefined(name, email, phone, status)) {
       return res.status(400).json({
@@ -54,7 +54,7 @@ export const customersController = {
     if (!isValidCustomerStatus(status)) {
       return res
         .status(400)
-        .json({ error: ERROR_MESSAGES.INVALID_STATUS('customers') })
+        .json({ error: ERROR_MESSAGES.INVALID_STATUS('customer') })
     }
 
     const input = { name, email, phone, status }
@@ -64,14 +64,14 @@ export const customersController = {
       .then((data) => {
         res
           .status(201)
-          .json({ message: SUCCESS_MESSAGES.ITEM_CREATE('customers'), data })
+          .json({ message: SUCCESS_MESSAGES.ITEM_CREATE('customer'), data })
       })
       .catch(next)
   },
   put: (req: Request, res: Response, next: NextFunction) => {
     const id = parseInt(req.params.id)
 
-    const { name, email, phone, order_ids: orderIds, status } = req.body
+    const { name, email, phone, status }: Partial<Omit<Customer, 'id' | 'orders'>> = req.body
 
     if (email !== undefined && !isValidEmail(email)) {
       return res.status(400).json({ error: ERROR_MESSAGES.INVALID_EMAIL() })
@@ -81,23 +81,16 @@ export const customersController = {
       return res.status(400).json({ error: ERROR_MESSAGES.INVALID_PHONE() })
     }
 
-    if (orderIds !== undefined && !areAllInOrders(orderIds)) {
-      return res
-        .status(400)
-        .json({ error: ERROR_MESSAGES.ITEM_NOT_FOUND('customers') })
-    }
-
     if (status !== undefined && !isValidCustomerStatus(status)) {
       return res
         .status(400)
-        .json({ error: ERROR_MESSAGES.INVALID_STATUS('customers') })
+        .json({ error: ERROR_MESSAGES.INVALID_STATUS('customer') })
     }
 
     const input = filterReqBody({
       name,
       email,
       phone,
-      order_ids: orderIds,
       status
     })
 
@@ -105,7 +98,7 @@ export const customersController = {
       .update(id, input)
       .then((data) => {
         res.status(200).json({
-          message: SUCCESS_MESSAGES.ITEM_UPDATE('customers'),
+          message: SUCCESS_MESSAGES.ITEM_UPDATE('customer'),
           data
         })
       })
@@ -119,7 +112,7 @@ export const customersController = {
       .then(() => {
         res
           .status(200)
-          .json({ message: SUCCESS_MESSAGES.ITEM_DELETE('customers') })
+          .json({ message: SUCCESS_MESSAGES.ITEM_DELETE('customer') })
       })
       .catch(next)
   }
