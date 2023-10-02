@@ -6,7 +6,7 @@ import {
   type CustomersTable
 } from './types'
 import { type Customer, type CustomerStatus } from '../types'
-import { orderModel } from './order'
+import orderModel from './order'
 
 const connection = sql.connect(mssqlConfig)
 
@@ -52,6 +52,10 @@ class customerModel {
     ).query<CustomersTable>`SELECT id FROM Customers WHERE id = ${id}`
     const rawCustomer = customerQuery.recordset[0]
 
+    if (rawCustomer === undefined) {
+      throw new ItemNotFound(id, { typeName: 'customer', method: 'read' })
+    }
+
     const customer = await this.customersTableToCustomer(rawCustomer)
 
     return customer
@@ -96,7 +100,7 @@ class customerModel {
     const response = await request.query(query)
 
     if (response.rowsAffected[0] === 0) {
-      throw new ItemNotFound(id, { typeName: 'customers', method: 'update' })
+      throw new ItemNotFound(id, { typeName: 'customer', method: 'update' })
     }
 
     return await this.read(id)
@@ -108,7 +112,7 @@ class customerModel {
     ).query`DELETE FROM Customers WHERE id = ${id}`
 
     if (deleteQuery.rowsAffected[0] === 0) {
-      throw new ItemNotFound(id, { typeName: 'customers', method: 'delete' })
+      throw new ItemNotFound(id, { typeName: 'customer', method: 'delete' })
     }
   }
 }
