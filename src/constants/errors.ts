@@ -1,12 +1,12 @@
-import { type Database } from '../types/db-types'
+import { type Models } from '../models/types'
 
 export class ModelError extends Error {
-  typeName?: keyof Database
+  typeName?: Models
   method?: 'read' | 'create' | 'update' | 'delete'
 
   constructor (
     options: {
-      typeName?: keyof Database
+      typeName?: Models
       method?: 'read' | 'create' | 'update' | 'delete'
     } = {}
   ) {
@@ -21,7 +21,7 @@ export class ItemNotFound extends ModelError {
   constructor (
     id: number,
     options: {
-      typeName?: keyof Database
+      typeName?: Models
       method?: 'read' | 'create' | 'update' | 'delete'
     } = {}
   ) {

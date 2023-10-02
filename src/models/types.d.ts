@@ -1,5 +1,7 @@
 // expected models return types
 
+type Models = 'customer' | 'employee' | 'inventoryItem' | 'order' | 'productionItem'
+
 interface Person {
   id: number
   name: string
@@ -51,12 +53,14 @@ export enum OrderStatus {
   Delivered = 'delivered'
 }
 
+export interface OrderProduct {
+  quantity: number
+  product: () => Promise<InventoryItem>
+}
+
 export interface Order {
   id: number
-  products: Array<{
-    quantity: number
-    product: () => Promise<InventoryItem>
-  }>
+  products: OrderProduct[]
   total_price: number
   status: OrderStatus
   customer: () => Promise<Customer>
