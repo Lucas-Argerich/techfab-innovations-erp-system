@@ -49,7 +49,7 @@ export interface InventoryItem {
   status: InventoryItemStatus
 }
 
-export interface InputInventoryItem extends InventoryItem { }
+export interface InputInventoryItem extends Omit<InventoryItem, 'id'> { }
 
 export enum OrderStatus {
   Cancelled = 'cancelled',
