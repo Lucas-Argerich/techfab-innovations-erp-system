@@ -19,6 +19,8 @@ export interface Customer extends Person {
   orders: () => Promise<Order[]>
 }
 
+export interface InputCustomer extends Omit<Customer, 'id' | 'orders'> { }
+
 export enum EmployeeStatus {
   Active = 'active',
   Suspended = 'suspended',
@@ -29,6 +31,8 @@ export interface Employee extends Person {
   position: string
   status: EmployeeStatus
 }
+
+export interface InputEmployee extends Omit<Employee, 'id'> { }
 
 export enum InventoryItemStatus {
   Available = 'available',
@@ -44,6 +48,8 @@ export interface InventoryItem {
   price: number
   status: InventoryItemStatus
 }
+
+export interface InputInventoryItem extends InventoryItem { }
 
 export enum OrderStatus {
   Cancelled = 'cancelled',
@@ -66,6 +72,14 @@ export interface Order {
   customer: () => Promise<Customer>
 }
 
+export interface InputOrder extends Omit<Order, 'id' | 'customer'> {
+  customer_id: number
+  products: Array<{
+    quanitiy: number
+    product_id: number
+  }>
+}
+
 export enum ProductionItemStatus {
   Cancelled = 'cancelled',
   Pending = 'pending',
@@ -78,4 +92,8 @@ export interface ProductionItem {
   quantity: number
   status: ProductionItemStatus
   product: () => Promise<InventoryItem>
+}
+
+export interface InputProductionItem extends Omit<ProductionItem, 'id' | 'product'> {
+  product_id: number
 }

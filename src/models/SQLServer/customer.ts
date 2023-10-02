@@ -5,7 +5,7 @@ import {
   type CustomersStatusTable,
   type CustomersTable
 } from './types'
-import { type Customer, type CustomerStatus } from '../types'
+import { type InputCustomer, type Customer, type CustomerStatus } from '../types'
 import orderModel from './order'
 
 const connection = sql.connect(mssqlConfig)
@@ -61,7 +61,7 @@ class customerModel {
     return customer
   }
 
-  static async create (input: Omit<Customer, 'id, orders'>): Promise<Customer> {
+  static async create (input: InputCustomer): Promise<Customer> {
     const { name, email, phone, status } = input
 
     const statusIdQuery = await (
@@ -83,7 +83,7 @@ class customerModel {
     return await this.read(id)
   }
 
-  static async update (id: number, input: Partial<Omit<Customer, 'id' | 'orders'>>): Promise<Customer> {
+  static async update (id: number, input: Partial<InputCustomer>): Promise<Customer> {
     const request = (await connection).request()
 
     const keys = Object.keys(input) as Array<keyof typeof input>
