@@ -30,3 +30,17 @@ export class ItemNotFound extends ModelError {
     this.message = `Item with ID ${id} not found.`
   }
 }
+
+export class StatusNotFound extends ModelError {
+  constructor (
+    status: string,
+    options: {
+      typeName?: Models
+      method?: 'read' | 'create' | 'update' | 'delete'
+    }
+  ) {
+    super(options)
+    this.name = 'StatusNotFound'
+    this.message = `Status '${status}' not found.`
+  }
+}
