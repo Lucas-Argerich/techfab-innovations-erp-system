@@ -75,7 +75,7 @@ export interface Order {
 export interface InputOrder extends Omit<Order, 'id' | 'customer'> {
   customer_id: number
   products: Array<{
-    quanitiy: number
+    quantity: number
     product_id: number
   }>
 }
