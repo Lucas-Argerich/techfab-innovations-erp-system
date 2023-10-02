@@ -1,4 +1,4 @@
-import { ItemNotFound } from '../../constants/errors'
+import { ItemNotFound, StatusNotFound } from '../../constants/errors'
 import mssqlConfig from '../../constants/mssqlConfig'
 import sql from 'mssql'
 import {
@@ -34,6 +34,19 @@ class customerModel {
     return status
   }
 
+  private static async readStatusId (status: string): Promise<number> {
+    const statusQuery = await (await connection).query<CustomersStatusTable>`SELECT id FROM CustomersStatus WHERE status = ${status}`
+    const statusRaw = statusQuery.recordset[0]
+
+    if (statusRaw === undefined) {
+      throw new StatusNotFound(status, { typeName: 'employee', method: 'read' })
+    }
+
+    const statusId = statusRaw.id
+
+    return statusId
+  }
+
   static async readAll (): Promise<Customer[]> {
     const selectAllQuery = await (
       await connection
@@ -64,12 +77,7 @@ class customerModel {
   static async create (input: InputCustomer): Promise<Customer> {
     const { name, email, phone, status } = input
 
-    const statusIdQuery = await (
-      await connection
-    ).query<
-      Pick<CustomersStatusTable, 'id'>
-    >`SELECT id FROM CustomersStatus WHERE status = ${status}`
-    const statusId = statusIdQuery.recordset[0].id
+    const statusId = await this.readStatusId(status)
 
     const insertQuery = await (
       await connection
@@ -88,12 +96,15 @@ class customerModel {
 
     const keys = Object.keys(input) as Array<keyof typeof input>
 
+    const statusId = input.status !== undefined && await this.readStatusId(input.status)
+
     request.input('id', id)
     keys.forEach((key, index) => {
-      request.input(`param${index}`, input[key])
+      request.input(`param${index}`, key === 'status' ? statusId : input[key])
     })
 
-    const sets = keys.map((key, index) => `${key} = @param${index}`)
+    const updateKeys = keys.map((key) => key === 'status' ? 'status_id' : key)
+    const sets = updateKeys.map((key, index) => `${key} = @param${index}`)
 
     const query = `UPDATE Customers SET ${sets.join(', ')} WHERE id = @id`
 
