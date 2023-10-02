@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
-import { InventoryItemStatus, type Database, OrderStatus, ProductionItemStatus, CustomerStatus, EmployeeStatus } from '../types/db-types'
+import { InventoryItemStatus, OrderStatus, ProductionItemStatus, CustomerStatus, EmployeeStatus } from '../models/types'
 
-export const db = JSON.parse(readFileSync('db/db.json', 'utf-8')) as Database
+export const db = JSON.parse(readFileSync('db/db.json', 'utf-8'))
 
 export const isAnyUndefined = (...values: any[]): boolean =>
   values.some((value) => value === undefined)
