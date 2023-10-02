@@ -9,7 +9,7 @@ import {
   isValidEmail,
   isValidPhoneNumber
 } from '../utils/utils'
-import { type Customer } from '../models/types'
+import { type InputCustomer } from '../models/types'
 
 export const customersController = {
   getAll: (req: Request, res: Response, next: NextFunction) => {
@@ -31,7 +31,7 @@ export const customersController = {
       .catch(next)
   },
   post: (req: Request, res: Response, next: NextFunction) => {
-    const { name, email, phone, status }: Omit<Customer, 'id' | 'orders'> = req.body
+    const { name, email, phone, status }: InputCustomer = req.body
 
     if (isAnyUndefined(name, email, phone, status)) {
       return res.status(400).json({
@@ -71,7 +71,7 @@ export const customersController = {
   put: (req: Request, res: Response, next: NextFunction) => {
     const id = parseInt(req.params.id)
 
-    const { name, email, phone, status }: Partial<Omit<Customer, 'id' | 'orders'>> = req.body
+    const { name, email, phone, status }: Partial<InputCustomer> = req.body
 
     if (email !== undefined && !isValidEmail(email)) {
       return res.status(400).json({ error: ERROR_MESSAGES.INVALID_EMAIL() })

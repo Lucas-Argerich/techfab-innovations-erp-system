@@ -1,11 +1,15 @@
 import { type NextFunction, type Request, type Response } from 'express'
-import { orderModel } from '../models/json/order'
+// import { orderModel } from '../models/json/order'
+import orderModel from '../models/SQLServer/order'
 import {
   filterReqBody,
   isAnyUndefined,
   isValidOrderStatus
 } from '../utils/utils'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants/messages'
+import { type InputOrder } from '../models/types'
+
+// Should handle the order product addition with other method/route
 
 export const ordersController = {
   getAll: (req: Request, res: Response, next: NextFunction) => {
@@ -28,13 +32,13 @@ export const ordersController = {
   },
   post: (req: Request, res: Response, next: NextFunction) => {
     const {
-      customer_id: customerId,
       products,
       total_price: totalPrice,
-      status
-    } = req.body
+      status,
+      customer_id: customerId
+    }: InputOrder = req.body
 
-    if (isAnyUndefined(customerId, products, totalPrice, status)) {
+    if (isAnyUndefined(products, totalPrice, status, customerId)) {
       return res.status(400).json({
         error: ERROR_MESSAGES.INVALID_REQUEST_BODY()
       })
@@ -42,15 +46,15 @@ export const ordersController = {
 
     if (!isValidOrderStatus(status)) {
       return res.status(400).json({
-        error: ERROR_MESSAGES.INVALID_STATUS('orders')
+        error: ERROR_MESSAGES.INVALID_STATUS('order')
       })
     }
 
     const input = {
-      customer_id: customerId,
       products,
       total_price: totalPrice,
-      status
+      status,
+      customer_id: customerId
     }
 
     orderModel
@@ -58,7 +62,7 @@ export const ordersController = {
       .then((data) => {
         res
           .status(201)
-          .json({ message: SUCCESS_MESSAGES.ITEM_CREATE('orders'), data })
+          .json({ message: SUCCESS_MESSAGES.ITEM_CREATE('order'), data })
       })
       .catch(next)
   },
@@ -66,23 +70,23 @@ export const ordersController = {
     const id = parseInt(req.params.id)
 
     const {
-      customer_id: customerId,
       products,
       total_price: totalPrice,
-      status
-    } = req.body
+      status,
+      customer_id: customerId
+    }: Partial<InputOrder> = req.body
 
     if (status !== undefined && !isValidOrderStatus(status)) {
       return res.status(400).json({
-        error: ERROR_MESSAGES.INVALID_STATUS('orders')
+        error: ERROR_MESSAGES.INVALID_STATUS('order')
       })
     }
 
     const input = filterReqBody({
-      customer_id: customerId,
       products,
       total_price: totalPrice,
-      status
+      status,
+      customer_id: customerId
     })
 
     orderModel
@@ -90,7 +94,7 @@ export const ordersController = {
       .then((data) => {
         res
           .status(200)
-          .json({ message: SUCCESS_MESSAGES.ITEM_UPDATE('orders'), data })
+          .json({ message: SUCCESS_MESSAGES.ITEM_UPDATE('order'), data })
       })
       .catch(next)
   },
@@ -102,7 +106,7 @@ export const ordersController = {
       .then(() => {
         res
           .status(200)
-          .json({ message: SUCCESS_MESSAGES.ITEM_DELETE('orders') })
+          .json({ message: SUCCESS_MESSAGES.ITEM_DELETE('order') })
       })
       .catch(next)
   }

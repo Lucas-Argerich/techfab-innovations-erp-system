@@ -1,7 +1,9 @@
 import { type NextFunction, type Request, type Response } from 'express'
-import { productionItemModel } from '../models/json/productionItem'
+// import { productionItemModel } from '../models/json/productionItem'
+import productionItemModel from '../models/SQLServer/productionItem'
 import { filterReqBody, isValidProductionItemStatus } from '../utils/utils'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants/messages'
+import { type InputProductionItem } from '../models/types'
 
 export const productionController = {
   getAll: (req: Request, res: Response, next: NextFunction) => {
@@ -23,11 +25,11 @@ export const productionController = {
       .catch(next)
   },
   post: (req: Request, res: Response, next: NextFunction) => {
-    const { product_id: productId, quantity, status } = req.body
+    const { product_id: productId, quantity, status }: InputProductionItem = req.body
 
     if (!isValidProductionItemStatus(status)) {
       return res.status(400).json({
-        error: ERROR_MESSAGES.INVALID_STATUS('production')
+        error: ERROR_MESSAGES.INVALID_STATUS('productionItem')
       })
     }
 
@@ -38,19 +40,19 @@ export const productionController = {
       .then((data) => {
         res
           .status(201)
-          .json({ message: SUCCESS_MESSAGES.ITEM_CREATE('production'), data })
+          .json({ message: SUCCESS_MESSAGES.ITEM_CREATE('productionItem'), data })
       })
       .catch(next)
   },
   put: (req: Request, res: Response, next: NextFunction) => {
     const id = parseInt(req.params.id)
 
-    const { product_id: productId, quantity, status } = req.body
+    const { product_id: productId, quantity, status }: Partial<InputProductionItem> = req.body
 
     if (status !== undefined && !isValidProductionItemStatus(status)) {
       return res
         .status(400)
-        .json({ error: ERROR_MESSAGES.INVALID_STATUS('production') })
+        .json({ error: ERROR_MESSAGES.INVALID_STATUS('productionItem') })
     }
 
     const input = filterReqBody({ product_id: productId, quantity, status })
@@ -60,7 +62,7 @@ export const productionController = {
       .then((data) => {
         res
           .status(200)
-          .json({ message: SUCCESS_MESSAGES.ITEM_UPDATE('production'), data })
+          .json({ message: SUCCESS_MESSAGES.ITEM_UPDATE('productionItem'), data })
       })
       .catch(next)
   },
@@ -72,7 +74,7 @@ export const productionController = {
       .then(() => {
         res
           .status(200)
-          .json({ message: SUCCESS_MESSAGES.ITEM_DELETE('production') })
+          .json({ message: SUCCESS_MESSAGES.ITEM_DELETE('productionItem') })
       })
       .catch(next)
   }

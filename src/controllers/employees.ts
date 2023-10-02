@@ -1,5 +1,6 @@
 import { type NextFunction, type Request, type Response } from 'express'
-import { employeeModel } from '../models/json/employee'
+// import { employeeModel } from '../models/json/employee'
+import employeeModel from '../models/SQLServer/employee'
 import {
   filterReqBody,
   isAnyUndefined,
@@ -8,6 +9,7 @@ import {
   isValidPhoneNumber
 } from '../utils/utils'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants/messages'
+import { type InputEmployee } from '../models/types'
 
 export const employeesController = {
   getAll: (req: Request, res: Response, next: NextFunction) => {
@@ -28,7 +30,7 @@ export const employeesController = {
       .catch(next)
   },
   post: (req: Request, res: Response, next: NextFunction) => {
-    const { name, email, phone, position, status } = req.body
+    const { name, email, phone, position, status }: InputEmployee = req.body
 
     if (isAnyUndefined(name, email, phone, position, status)) {
       return res.status(400).json({
@@ -50,7 +52,7 @@ export const employeesController = {
 
     if (!isValidEmployeeStatus(status)) {
       return res.status(400).json({
-        error: ERROR_MESSAGES.INVALID_STATUS('employees')
+        error: ERROR_MESSAGES.INVALID_STATUS('employee')
       })
     }
 
@@ -61,14 +63,14 @@ export const employeesController = {
       .then((data) => {
         res
           .status(201)
-          .json({ message: SUCCESS_MESSAGES.ITEM_CREATE('employees'), data })
+          .json({ message: SUCCESS_MESSAGES.ITEM_CREATE('employee'), data })
       })
       .catch(next)
   },
   put: (req: Request, res: Response, next: NextFunction) => {
     const id = parseInt(req.params.id)
 
-    const { name, email, phone, position, status } = req.body
+    const { name, email, phone, position, status }: Partial<InputEmployee> = req.body
 
     if (email !== undefined && !isValidEmail(email)) {
       return res.status(400).json({ error: ERROR_MESSAGES.INVALID_EMAIL() })
@@ -81,7 +83,7 @@ export const employeesController = {
     if (status !== undefined && !isValidEmployeeStatus(status)) {
       return res
         .status(400)
-        .json({ error: ERROR_MESSAGES.INVALID_STATUS('employees') })
+        .json({ error: ERROR_MESSAGES.INVALID_STATUS('employee') })
     }
 
     const input = filterReqBody({ name, email, phone, position, status })
@@ -91,7 +93,7 @@ export const employeesController = {
       .then((data) => {
         res
           .status(200)
-          .json({ message: SUCCESS_MESSAGES.ITEM_UPDATE('employees'), data })
+          .json({ message: SUCCESS_MESSAGES.ITEM_UPDATE('employee'), data })
       })
       .catch(next)
   },
@@ -103,7 +105,7 @@ export const employeesController = {
       .then(() => {
         res
           .status(200)
-          .json({ message: SUCCESS_MESSAGES.ITEM_DELETE('employees') })
+          .json({ message: SUCCESS_MESSAGES.ITEM_DELETE('employee') })
       })
       .catch(next)
   }
