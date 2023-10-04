@@ -3,11 +3,13 @@ const { describe, it } = require('mocha')
 const request = require('supertest')
 const express = require('express')
 const { productionRouter } = require('../dist/routes/production')
+const { inventoryRouter } = require('../dist/routes/inventory')
 const { ProductionItemStatus } = require('../dist/types/db-types')
 
 const app = express()
 app.use(express.json())
 app.use('/production', productionRouter)
+app.use('/inventory', inventoryRouter)
 
 describe('Production API', () => {
   let itemId = 1
@@ -100,9 +102,18 @@ describe('Production API', () => {
         .put(`/production/${itemId}`)
         .send(updatedItem)
 
+      const responseItem = {
+        quantity: 12,
+        status: ProductionItemStatus.InProgress
+      }
+
+      const productRes = await request(app).get(`/inventory/${updatedItem.product_id}`)
+      const product = productRes.body
+
       expect(res.status).to.equal(200)
       expect(res.body).to.have.property('message')
-      expect(res.body.data).to.deep.include(updatedItem)
+      expect(res.body.data).to.deep.include(responseItem)
+      expect(res.body.data.product).to.deep.include(product)
     })
 
     it('should fail to update a production item with an invalid status', async () => {
