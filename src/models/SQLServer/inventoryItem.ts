@@ -10,7 +10,7 @@ class inventoryItemModel {
   private static async inventoryTableToInventoryItem (rawInventoryItem: InventoryTable): Promise<InventoryItem> {
     const { id, name, category, quantity, price, status_id: statusId } = rawInventoryItem
 
-    const status = await this.readStatus(statusId)
+    const status = await inventoryItemModel.readStatus(statusId)
 
     return { id, name, category, quantity, price, status }
   }
@@ -19,7 +19,6 @@ class inventoryItemModel {
     const statusQuery = await (
       await connection
     ).query<InventoryStatusTable>`SELECT * FROM InventoryStatus WHERE id = ${statusId}`
-
     const status = statusQuery.recordset[0].status as InventoryItemStatus
 
     return status
@@ -27,13 +26,13 @@ class inventoryItemModel {
 
   private static async readStatusId (status: string): Promise<number> {
     const statusQuery = await (await connection).query<InventoryStatusTable>`SELECT id FROM InventoryStatus WHERE status = ${status}`
-    const statusRaw = statusQuery.recordset[0]
+    const rawStatus = statusQuery.recordset[0]
 
-    if (statusRaw === undefined) {
+    if (rawStatus === undefined) {
       throw new StatusNotFound(status, { typeName: 'inventoryItem', method: 'read' })
     }
 
-    const statusId = statusRaw.id
+    const statusId = rawStatus.id
 
     return statusId
   }
@@ -63,7 +62,7 @@ class inventoryItemModel {
   static async create (input: InputInventoryItem): Promise<InventoryItem> {
     const { name, category, quantity, price, status } = input
 
-    const statusId = this.readStatusId(status)
+    const statusId = await this.readStatusId(status)
 
     const insertQuery = await (await connection).query<Pick<InventoryTable, 'id'>>`
     INSERT INTO Inventory (name, category, quantity, price, status_id)
