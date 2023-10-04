@@ -1,6 +1,6 @@
 // expected models return types
 
-type Models = 'customer' | 'employee' | 'inventoryItem' | 'order' | 'productionItem'
+export type Models = 'customer' | 'employee' | 'inventoryItem' | 'order' | 'productionItem'
 
 interface Person {
   id: number
@@ -16,7 +16,7 @@ export enum CustomerStatus {
 
 export interface Customer extends Person {
   status: CustomerStatus
-  orders: () => Promise<Order[]>
+  orders: Order[]
 }
 
 export interface InputCustomer extends Omit<Customer, 'id' | 'orders'> { }
@@ -61,7 +61,7 @@ export enum OrderStatus {
 
 export interface OrderProduct {
   quantity: number
-  product: () => Promise<InventoryItem>
+  product: InventoryItem
 }
 
 export interface Order {
@@ -69,10 +69,10 @@ export interface Order {
   products: OrderProduct[]
   total_price: number
   status: OrderStatus
-  customer: () => Promise<Customer>
+  customer_id: number
 }
 
-export interface InputOrder extends Omit<Order, 'id' | 'customer'> {
+export interface InputOrder extends Omit<Order, 'id' | 'customer' | 'products'> {
   customer_id: number
   products: Array<{
     quantity: number
@@ -91,7 +91,7 @@ export interface ProductionItem {
   id: number
   quantity: number
   status: ProductionItemStatus
-  product: () => Promise<InventoryItem>
+  product: InventoryItem
 }
 
 export interface InputProductionItem extends Omit<ProductionItem, 'id' | 'product'> {
