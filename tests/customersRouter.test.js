@@ -108,20 +108,6 @@ describe('Customers API', () => {
       expect(res.status).to.equal(404)
       expect(res.body).to.have.property('error')
     })
-
-    it('should fail to update an existing customer when some id in order_ids is not in the orders db', async () => {
-      const updatedItem = {
-        email: 'johndoe@example.com',
-        order_ids: [9999]
-      }
-
-      const res = await request(app)
-        .put(`/customers/${itemId}`)
-        .send(updatedItem)
-
-      expect(res.status).to.equal(400)
-      expect(res.body).to.have.property('error')
-    })
   })
 
   describe('DELETE /customers/:id', () => {

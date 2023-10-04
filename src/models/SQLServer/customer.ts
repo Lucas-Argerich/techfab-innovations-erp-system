@@ -16,11 +16,11 @@ class customerModel {
   ): Promise<Customer> {
     const { id, name, email, phone, status_id: statusId } = rawCustomer
 
-    const status = await this.readStatus(statusId)
+    const status = await customerModel.readStatus(statusId)
 
-    const getOrders = async () => await orderModel.readByCustomerId(id)
+    const orders = await orderModel.readByCustomerId(id)
 
-    return { id, name, email, phone, status, orders: getOrders }
+    return { id, name, email, phone, status, orders }
   }
 
   private static async readStatus (statusId: number): Promise<CustomerStatus> {
@@ -50,7 +50,7 @@ class customerModel {
   static async readAll (): Promise<Customer[]> {
     const selectAllQuery = await (
       await connection
-    ).query<CustomersTable>('SELECT * FROM customers')
+    ).query<CustomersTable>('SELECT * FROM Customers')
 
     const customers = await Promise.all(
       selectAllQuery.recordset.map(this.customersTableToCustomer)
@@ -62,7 +62,7 @@ class customerModel {
   static async read (id: number): Promise<Customer> {
     const customerQuery = await (
       await connection
-    ).query<CustomersTable>`SELECT id FROM Customers WHERE id = ${id}`
+    ).query<CustomersTable>`SELECT * FROM Customers WHERE id = ${id}`
     const rawCustomer = customerQuery.recordset[0]
 
     if (rawCustomer === undefined) {
