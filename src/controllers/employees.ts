@@ -23,7 +23,7 @@ export const employeesController = {
   getById: (req: Request, res: Response, next: NextFunction) => {
     const id = parseInt(req.params.id)
     employeeModel
-      .readById(id)
+      .read(id)
       .then((employee) => {
         res.status(200).json(employee)
       })

@@ -10,7 +10,7 @@ class employeeModel {
   private static async employeesTableToEmployee (rawEmployee: EmployeesTable): Promise<Employee> {
     const { id, name, email, phone, position, status_id: statusId } = rawEmployee
 
-    const status = await this.readStatus(statusId)
+    const status = await employeeModel.readStatus(statusId)
 
     return { id, name, email, phone, position, status }
   }
@@ -58,7 +58,7 @@ class employeeModel {
   static async create (input: InputEmployee): Promise<Employee> {
     const { name, email, phone, position, status } = input
 
-    const statusId = this.readStatusId(status)
+    const statusId = await this.readStatusId(status)
 
     const insertQuery = await (await connection).query<Pick<EmployeesTable, 'id'>>`
     INSERT INTO Employees (name, email, phone, position, status_id) 
