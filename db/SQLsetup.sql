@@ -63,7 +63,7 @@ CREATE TABLE Orders (
   total_price FLOAT NOT NULL,
   status_id INT NOT NULL FOREIGN KEY REFERENCES OrdersStatus(id)
 );
-CREATE TABLE OrderProducts (
+CREATE TABLE OrderItems (
   id INT NOT NULL IDENTITY(1, 1) PRIMARY KEY,
   order_id INT NOT NULL FOREIGN KEY REFERENCES Orders(id),
   product_id INT NOT NULL FOREIGN KEY REFERENCES Inventory(id),
