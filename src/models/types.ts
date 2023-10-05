@@ -59,26 +59,25 @@ export enum OrderStatus {
   Delivered = 'delivered'
 }
 
-export interface OrderProduct {
+export interface OrderItem {
+  id: number
   quantity: number
   product: InventoryItem
 }
 
+export interface InputOrderItem extends Omit<OrderItem, 'id' | 'product'> {
+  product_id: number
+}
+
 export interface Order {
   id: number
-  products: OrderProduct[]
+  items: OrderItem[]
   total_price: number
   status: OrderStatus
   customer_id: number
 }
 
-export interface InputOrder extends Omit<Order, 'id' | 'customer' | 'products'> {
-  customer_id: number
-  products: Array<{
-    quantity: number
-    product_id: number
-  }>
-}
+export interface InputOrder extends Omit<Order, 'id' | 'items'> { }
 
 export enum ProductionItemStatus {
   Cancelled = 'cancelled',
