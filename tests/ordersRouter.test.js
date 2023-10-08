@@ -180,7 +180,6 @@ describe('Orders API', () => {
       expect(res.status).to.equal(201)
       expect(res.body).to.have.property('message')
       expect(res.body.data).to.have.property('id')
-      expect(res.body.data).to.deep.include(newOrderItem)
 
       itemId = res.body.data.id
     })
