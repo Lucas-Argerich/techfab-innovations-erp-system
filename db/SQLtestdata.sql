@@ -22,8 +22,8 @@ INSERT INTO Orders (customer_id, total_price, status_id)
 VALUES (1, 300.0, 2),
        (2, 150.0, 1);
 
--- Insert data into OrderProducts
-INSERT INTO OrderProducts (order_id, product_id, quantity)
+-- Insert data into OrderItems
+INSERT INTO OrderItems (order_id, product_id, quantity)
 VALUES (1, 1, 2),
        (1, 2, 1),
        (2, 1, 3),

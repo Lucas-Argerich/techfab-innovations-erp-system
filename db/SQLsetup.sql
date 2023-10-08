@@ -1,5 +1,22 @@
--- CREATE DATABASE TECHFAB_ERP;
+USE master;
+GO
+
+CREATE LOGIN [techfab] WITH PASSWORD = 'rootroot';
+GO
+
+CREATE DATABASE TECHFAB_ERP;
+GO
+
 USE TECHFAB_ERP;
+GO
+
+CREATE USER [techfab] FOR LOGIN [techfab];
+GO
+
+-- Assign appropriate permissions to the user
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA::dbo TO [techfab];
+GO
+
 CREATE TABLE CustomersStatus (
   id INT NOT NULL IDENTITY(1, 1) PRIMARY KEY,
   status VARCHAR(32) NOT NULL

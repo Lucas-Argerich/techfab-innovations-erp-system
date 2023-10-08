@@ -36,7 +36,7 @@ export interface InventoryTable {
 
 export interface InventoryStatusTable extends StatusTable {}
 
-export interface OrderProductsTable {
+export interface OrderItemsTable {
   id: number
   order_id: number
   product_id: number
