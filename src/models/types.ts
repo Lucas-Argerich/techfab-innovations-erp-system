@@ -1,6 +1,6 @@
 // expected models return types
 
-export type Models = 'customer' | 'employee' | 'inventoryItem' | 'order' | 'productionItem'
+export type Models = 'customer' | 'employee' | 'inventoryItem' | 'order' | 'orderItem' | 'productionItem'
 
 interface Person {
   id: number
