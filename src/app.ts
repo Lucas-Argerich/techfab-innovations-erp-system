@@ -1,4 +1,5 @@
 import express from 'express'
+import path from 'node:path'
 import { corsMiddleware } from './middlewares/cors'
 import { inventoryRouter } from './routes/inventory'
 import { ordersRouter } from './routes/orders'
@@ -10,7 +11,12 @@ import { employeesRouter } from './routes/employees'
 const app = express()
 app.disable('x-powered-by')
 
+// ejs config
+app.set('view engine', 'ejs')
+app.set('views', 'src/views')
+
 // Middleware
+app.use(express.static(path.join(__dirname, 'public')))
 app.use(corsMiddleware())
 
 // Routes
