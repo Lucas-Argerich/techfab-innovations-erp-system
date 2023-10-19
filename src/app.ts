@@ -6,7 +6,7 @@ import { ordersRouter } from './routes/orders'
 import { productionRouter } from './routes/production'
 import { customersRouter } from './routes/customers'
 import { employeesRouter } from './routes/employees'
-import { homeRouter } from './routes/home'
+import { homepageRouter } from './routes/homepage'
 
 // Configuration
 const app = express()
@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(corsMiddleware())
 
 // Routes
-app.use('/', homeRouter)
+app.use('/', homepageRouter)
 app.use('/inventory', inventoryRouter)
 app.use('/orders', ordersRouter)
 app.use('/production', productionRouter)
