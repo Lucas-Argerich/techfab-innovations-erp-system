@@ -10,7 +10,7 @@ ordersRouter.use(json())
 ordersRouter.get('/', ordersController.getAll)
 
 // Get a sepcific order by ID
-ordersRouter.get('/:id', ordersController.getById)
+ordersRouter.get('/:id', ordersController.get)
 
 // Create a new order item
 ordersRouter.post('/', ordersController.post)
@@ -25,7 +25,7 @@ ordersRouter.delete('/:id', ordersController.delete)
 ordersRouter.get('/:id/items', orderItemController.getAll)
 
 // Get a sepcific item of an order by ID
-ordersRouter.get('/:id/items/:itemId', orderItemController.getById)
+ordersRouter.get('/:id/items/:itemId', orderItemController.get)
 
 // Create a new item of an order
 ordersRouter.post('/:id/items', orderItemController.post)

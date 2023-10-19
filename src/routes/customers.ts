@@ -10,7 +10,7 @@ customersRouter.use(json())
 customersRouter.get('/', customersController.getAll)
 
 // Get a specific customer item by ID
-customersRouter.get('/:id', customersController.getById)
+customersRouter.get('/:id', customersController.get)
 
 // Create a new customer item
 customersRouter.post('/', customersController.post)

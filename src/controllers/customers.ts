@@ -16,17 +16,17 @@ export const customersController = {
     customerModel
       .readAll()
       .then((customers) => {
-        res.status(200).json(customers)
+        res.status(200).render('pages/customers/index', { customers })
       })
       .catch(next)
   },
-  getById: (req: Request, res: Response, next: NextFunction) => {
+  get: (req: Request, res: Response, next: NextFunction) => {
     const id = parseInt(req.params.id)
 
     customerModel
       .read(id)
       .then((customer) => {
-        res.status(200).json(customer)
+        res.status(200).render('pages/customers/customer', { customer })
       })
       .catch(next)
   },

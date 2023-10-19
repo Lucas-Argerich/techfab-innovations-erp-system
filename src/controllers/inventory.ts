@@ -14,7 +14,7 @@ export const inventoryController = {
     inventoryItemModel
       .readAll()
       .then((inventory) => {
-        res.status(200).json(inventory)
+        res.status(200).render('pages/inventory/index', { inventory })
       })
       .catch(next)
   },
@@ -24,7 +24,7 @@ export const inventoryController = {
     inventoryItemModel
       .read(id)
       .then((inventoryItem) => {
-        res.status(200).json(inventoryItem)
+        res.status(200).render('pages/inventory/inventoryItem', { inventoryItem })
       })
       .catch(next)
   },

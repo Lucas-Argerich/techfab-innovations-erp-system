@@ -10,7 +10,7 @@ export const productionController = {
     productionItemModel
       .readAll()
       .then((production) => {
-        res.status(200).json(production)
+        res.status(200).render('pages/production/index', { production })
       })
       .catch(next)
   },
@@ -20,7 +20,7 @@ export const productionController = {
     productionItemModel
       .read(id)
       .then((productionItem) => {
-        res.status(200).json(productionItem)
+        res.status(200).render('pages/production/productionItem', { productionItem })
       })
       .catch(next)
   },

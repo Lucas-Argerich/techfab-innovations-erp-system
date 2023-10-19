@@ -16,16 +16,16 @@ export const employeesController = {
     employeeModel
       .readAll()
       .then((employees) => {
-        res.status(200).json(employees)
+        res.status(200).render('pages/employees/index', { employees })
       })
       .catch(next)
   },
-  getById: (req: Request, res: Response, next: NextFunction) => {
+  get: (req: Request, res: Response, next: NextFunction) => {
     const id = parseInt(req.params.id)
     employeeModel
       .read(id)
       .then((employee) => {
-        res.status(200).json(employee)
+        res.status(200).render('pages/employees/employee', { employee })
       })
       .catch(next)
   },

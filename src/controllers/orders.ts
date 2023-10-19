@@ -14,17 +14,17 @@ export const ordersController = {
     orderModel
       .readAll()
       .then((orders) => {
-        res.status(200).json(orders)
+        res.status(200).render('pages/orders/index', { orders })
       })
       .catch(next)
   },
-  getById: (req: Request, res: Response, next: NextFunction) => {
+  get: (req: Request, res: Response, next: NextFunction) => {
     const id = parseInt(req.params.id)
 
     orderModel
       .read(id)
       .then((order) => {
-        res.status(200).json(order)
+        res.status(200).render('pages/orders/order', { order })
       })
       .catch(next)
   },
@@ -116,7 +116,7 @@ export const orderItemController = {
       })
       .catch(next)
   },
-  getById: (req: Request, res: Response, next: NextFunction) => {
+  get: (req: Request, res: Response, next: NextFunction) => {
     const orderId = parseInt(req.params.id)
     const itemId = parseInt(req.params.itemId)
 

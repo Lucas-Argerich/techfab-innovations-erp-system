@@ -10,7 +10,7 @@ employeesRouter.use(json())
 employeesRouter.get('/', employeesController.getAll)
 
 // Get a specific employee item by ID
-employeesRouter.get('/:id', employeesController.getById)
+employeesRouter.get('/:id', employeesController.get)
 
 // Create a new employee item
 employeesRouter.post('/', employeesController.post)
