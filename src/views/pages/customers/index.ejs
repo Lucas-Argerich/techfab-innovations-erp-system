@@ -7,7 +7,52 @@
   <body>
     <%- include('../../partials/sidebar') %>
     <main>
-      Customers Page
+      <div>
+        <h2>Customers</h2>
+        <div class="panel">
+          <div class="search-bar">
+            <input placeholder="Search">
+            <button class="search-clear">
+              <img src="/assets/cross_3917759.svg">
+            </button>
+            <button class="search-button">
+              <img src="/assets/search_3917754.svg">
+            </button>
+          </div>
+          <ol>
+            <% customers.map((customer) => { %>
+              <li>
+                <div class="client-holder">
+                  <div class="client-data">
+                    <span>
+                      <h3><%= customer.name %></h3>
+                      <h4><%= customer.email %></h4>
+                    </span>
+                    <% if (customer.status === 'archived' ) { %>
+                      <div class="client-status">
+                        <%= customer.status %>
+                      </div>
+                    <% } %>
+                  </div>
+                  <div class="client-options">
+                    <a href="customers/<%= customer.id %>" tabindex="0">
+                      Panel
+                    </a>
+                  </div>
+                </div>
+              </li>
+            <% }) %>
+          </ol>
+        </div>
+      </section>
     </main>
   </body>
+  <script>
+    document.querySelectorAll('.client-data').forEach((element, i, arr) => {
+      element.addEventListener('click', () => {
+        arr.forEach((e) => e !== element && e.classList.remove('open'))
+        element.classList.toggle('open')
+      })
+    })
+  </script>
 </html>
