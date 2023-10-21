@@ -100,6 +100,10 @@ aside nav ul li a img {
 }
 
 /* 3. Client Holder */
+.client-list-item.hidden {
+  display: none;
+}
+
 .client-holder {
   height: 100%;
   display: flex;
@@ -111,12 +115,27 @@ aside nav ul li a img {
   align-items: center;
   justify-content: space-between;
   padding: 10px 20px;
+}
+
+.client-holder .client-data .client-toggle-options {
+  display: none;
+}
+
+.client-holder:hover .client-data .client-toggle-options,
+.client-data.open .client-toggle-options {
+  display: flex;
+  height: 100%;
+}
+
+.client-holder .client-data .client-toggle-options img {
+  height: 16px;
+  user-select: none;
   cursor: pointer;
 }
 
 .client-holder .client-options {
   display: none;
-  padding: 0 10px 10px;
+  padding: 0 20px 10px;
 }
 
 .client-data.open ~ .client-options {
@@ -129,8 +148,14 @@ aside nav ul li a img {
   border-radius: 4px;
   font-size: 0.875rem;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
+.client-holder .client-options a img {
+  height: 10px;
+}
 
 /* 4. Search Bar */
 .search-bar {

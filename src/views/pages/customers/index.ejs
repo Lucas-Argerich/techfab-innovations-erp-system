@@ -20,8 +20,8 @@
             </button>
           </div>
           <ol>
-            <% customers.map((customer) => { %>
-              <li>
+            <% customers.sort((a, b) => a.status.length - b.status.length).map((customer, i) => { %>
+              <li class="client-list-item">
                 <div class="client-holder">
                   <div class="client-data">
                     <span>
@@ -33,9 +33,13 @@
                         <%= customer.status %>
                       </div>
                     <% } %>
+                    <span class="client-toggle-options">
+                      <img src="/assets/caret-down_3916943.svg">
+                    </span>
                   </div>
                   <div class="client-options">
                     <a href="customers/<%= customer.id %>" tabindex="0">
+                      <img src="/assets/arrow-up-right-from-square_8535544.svg">
                       Panel
                     </a>
                   </div>
@@ -48,11 +52,45 @@
     </main>
   </body>
   <script>
+    // Client Options Toggle
     document.querySelectorAll('.client-data').forEach((element, i, arr) => {
       element.addEventListener('click', () => {
         arr.forEach((e) => e !== element && e.classList.remove('open'))
         element.classList.toggle('open')
       })
     })
+
+    // Search Filtering
+    const listItems = document.querySelectorAll('.client-list-item')
+    const itemsData = [...listItems].map((element) => {
+      const name = element.querySelector('h3').innerText
+      const email = element.querySelector('h4').innerText
+      return { name, email }
+    })
+
+    const searchContainer = document.querySelector('.search-bar')
+    const input = searchContainer.querySelector('input')
+
+    const filterQuery = () =>  {
+      const searchTerm = input.value.trim()
+      const regex = new RegExp(searchTerm, "i")
+
+      const filteredMap = itemsData.map((item) => regex.test(item.name) || regex.test(item.email));
+      listItems.forEach((element, i) => {
+        filteredMap[i] ? element.classList.remove('hidden') : element.classList.add('hidden')
+      })
+    }
+
+    input.addEventListener('input', filterQuery)
+
+    // Clear Search filter
+    const clearButton = searchContainer.querySelector('.search-clear')
+
+    const clearInput = () => {
+      input.value = ''
+      filterQuery()
+    }
+
+    clearButton.addEventListener('click', clearInput)
   </script>
 </html>
