@@ -11,8 +11,8 @@
   <ol>
     <% customers.sort((a, b) => a.status.length - b.status.length).map((customer, i) => { %>
       <li class="client-list-item">
-        <div class="client-holder" tabindex="0">
-          <div class="client-data">
+        <div class="client-holder">
+          <div class="client-data" tabindex="0">
             <span>
               <h3><%= customer.name %></h3>
               <h4><%= customer.email %></h4>
@@ -40,9 +40,14 @@
 <script>
   // Client Options Toggle
   document.querySelectorAll('.client-data').forEach((element, i, arr) => {
-    element.addEventListener('click', () => {
+    const toggleOptions = () => {
       arr.forEach((e) => e !== element && e.classList.remove('open'))
       element.classList.toggle('open')
+    }
+    element.addEventListener('click', toggleOptions)
+    element.addEventListener('keydown', (e) => {
+      console.log(e)
+      if (e.key === 'Enter') toggleOptions()
     })
   })
 
