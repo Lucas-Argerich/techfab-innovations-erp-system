@@ -89,6 +89,7 @@ aside nav ul li a img {
   list-style-type: none;
   overflow-y: auto;
   flex: 1;
+  padding: 1px;
 } 
 
 .panel li {
