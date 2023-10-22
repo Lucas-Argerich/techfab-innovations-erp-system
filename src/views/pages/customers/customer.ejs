@@ -10,84 +10,11 @@
       <section>
         <h2>Customer Data</h2>
         <div class="customer-data-container">
-          <div class="customer-data-placeholder">
-            <label for="customer-name">Name:</label>
-            <span>
-              <img />
-              <input
-                type="text"
-                id="customer-name"
-                value="<%= customer.name %>"
-                disabled
-              />
-              <div class="customer-data-options">
-                <button class="edit-option">
-                  <img src="/assets/pencil_3917376.svg" />
-                </button>
-                <button class="edit-submit hidden">
-                  <img src="/assets/check_3917749.svg" />
-                </button>
-                <button class="edit-cancel hidden">
-                  <img src="/assets/cross-small_3917195.svg" />
-                </button>
-                <button class="edit-loading hidden">
-                  <img src="/assets/loading_3914371.svg" />
-                </button>
-              </div>
-            </span>
-          </div>
-          <div class="customer-data-placeholder">
-            <label for="customer-email">Email:</label>
-            <span>
-              <img />
-              <input
-                type="text"
-                id="customer-email"
-                value="<%= customer.email %>"
-                disabled
-              />
-              <div class="customer-data-options">
-                <button class="edit-option">
-                  <img src="/assets/pencil_3917376.svg" />
-                </button>
-                <button class="edit-submit hidden">
-                  <img src="/assets/check_3917749.svg" />
-                </button>
-                <button class="edit-cancel hidden">
-                  <img src="/assets/cross-small_3917195.svg" />
-                </button>
-                <button class="edit-loading hidden">
-                  <img src="/assets/loading_3914371.svg" />
-                </button>
-              </div>
-            </span>
-          </div>
-          <div class="customer-data-placeholder">
-            <label for="customer-phone">Phone:</label>
-            <span>
-              <img />
-              <input
-                type="text"
-                id="customer-phone"
-                value="<%= customer.phone %>"
-                disabled
-              />
-              <div class="customer-data-options">
-                <button class="edit-option">
-                  <img src="/assets/pencil_3917376.svg" />
-                </button>
-                <button class="edit-submit hidden">
-                  <img src="/assets/check_3917749.svg" />
-                </button>
-                <button class="edit-cancel hidden">
-                  <img src="/assets/cross-small_3917195.svg" />
-                </button>
-                <button class="edit-loading hidden">
-                  <img src="/assets/loading_3914371.svg" />
-                </button>
-              </div>
-            </span>
-          </div>
+          <%- include('../../components/dataEditInput', { value: 'name' }) %>
+          <%- include('../../components/dataEditInput', { value: 'email' }) %>
+          <%- include('../../components/dataEditInput', { value: 'phone' }) %>
+          <%- include('../../components/dataEditInput', { value: 'status' }) %>
+          <!-- Status handling is subject to change -->
         </div>
       </section>
     </main>
