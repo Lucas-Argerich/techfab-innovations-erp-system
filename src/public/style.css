@@ -199,7 +199,9 @@ aside nav ul li a img {
 /* 5. Data Placeholder */
 .customer-data-container {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 0 40px;
+  margin-top: 30px;
 }
 
 .customer-data-placeholder {
