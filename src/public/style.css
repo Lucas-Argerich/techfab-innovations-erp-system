@@ -28,6 +28,10 @@ a {
 
 /* COMPONENTS */
 
+.hidden {
+  display: none !important;
+}
+
 /* 1. Aside */
 aside {
   display: flex;
@@ -76,7 +80,7 @@ aside nav ul li a img {
 /* 2. Panel */
 .panel {
   width: 100%;
-  height: 500px;
+  max-height: 500px;
   margin: 50px 0;
   border-radius: 10px;
   border: 2px solid var(--shadow);
@@ -101,10 +105,6 @@ aside nav ul li a img {
 }
 
 /* 3. Client Holder */
-.client-list-item.hidden {
-  display: none;
-}
-
 .client-holder {
   height: 100%;
   display: flex;
@@ -196,6 +196,79 @@ aside nav ul li a img {
   user-select: none;
 }
 
+/* 5. Data Placeholder */
+.customer-data-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.customer-data-placeholder {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0;
+  max-width: 350px;
+}
+
+.customer-data-placeholder span {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--shadow);
+  border-radius: 5px;
+  width: 100%;
+}
+
+.customer-data-placeholder label {
+  padding-left: 21px;
+  font-size: 0.875rem;
+}
+
+.customer-data-placeholder span input {
+  width: 100%;
+  height: 100%;
+  padding-left: 20px;
+  font-size: 0.875rem;
+}
+
+.customer-data-placeholder span .customer-data-options {
+  width: 100px;
+  height: 100%;
+  border-left: 2px solid var(--shadow);
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.customer-data-placeholder span .customer-data-options button {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.customer-data-placeholder span .customer-data-options button img {
+  max-height: 100%;
+  height: 16px;
+}
+
+.customer-data-placeholder span .customer-data-options .edit-loading {
+  animation: infinite loadAnimation 1s;
+}
+
+@keyframes loadAnimation {
+  0% {
+    rotate: 0deg;
+  }
+
+  50% {
+    rotate: 90deg;
+  }
+
+  100% {
+    rotate: 180deg;
+  }
+}
+
 
 /* APP */
 
@@ -221,7 +294,7 @@ h1 {
 }
 
 h2 {
-  font-size: 1.25rem;
+  font-size: 1.375rem;
   font-weight: 700;
 }
 
